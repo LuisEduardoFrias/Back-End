@@ -7,7 +7,7 @@ using ArsAfiliados.Service.SettingsStrings;
 
 namespace ArsAfiliados.Persistence.Data
 {
-    public class DataAccess
+    internal class DataAccess
     {
 
 
@@ -77,13 +77,13 @@ namespace ArsAfiliados.Persistence.Data
         }
 
 
-        public async Task<int> ExecuteNonQueryAsync()
+        public async Task<int> ExecuteNonQueryAsync()   
         {
-            var result = _sqlCommnd.ExecuteNonQueryAsync();
+            var result = await _sqlCommnd.ExecuteNonQueryAsync();
 
             CloseConnection();
 
-            return await result;
+            return result;
         }
 
 

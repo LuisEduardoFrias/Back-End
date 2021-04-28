@@ -39,7 +39,7 @@ namespace ArsAfiliados.Domain.Dtos
 
         public string PlanName => Plan.PlanName;
 
-        public decimal MontoCobertura => Plan.CoverageAmount;
+        public decimal CoverageAmount  => Plan.CoverageAmount;
 
     }
 

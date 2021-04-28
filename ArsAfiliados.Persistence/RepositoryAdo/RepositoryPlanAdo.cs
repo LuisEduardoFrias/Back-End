@@ -38,7 +38,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
 
             try
             {
-                DataAccess
+                await DataAccess
                 .GetInstance()
                 .OpenConnection()
                 .UserStoreProcedure("ShowPlans")
@@ -64,6 +64,42 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
 
             return planes;
         }
+
+        
+        public async Task<List<ShowPlanDto>> ShowAllWhereStatusTrue()
+        {
+            List<ShowPlanDto> planes = new List<ShowPlanDto>();
+
+            try
+            {
+                await DataAccess
+                .GetInstance()
+                .OpenConnection()
+                .UserStoreProcedure("ShowPlans")
+                .ExecuteReaderAsync(async (reader) =>
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        if (reader["Status"].ToBool() == true)
+                            planes.Add(new ShowPlanDto
+                            {
+                                Id = reader["Id"].ToInt(),
+                                PlanName = reader["PlanName"].ToString(),
+                                CoverageAmount = reader["CoverageAmount"].ToDecimal(),
+                                RegistrationDate = reader["RegistrationDate"].ToDateTime(),
+                                Status = reader["Status"].ToBool(),
+                            });
+                    }
+                });
+            }
+            catch
+            {
+                planes.Add(new ShowPlanDto { IsError = true });
+            }
+
+            return planes;
+        }
+
 
         public async Task<bool> Create(CreatePlanDto entityDto)
         {
@@ -156,7 +192,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
             return result;
         }
 
-        public async Task<ShowPlanDto> Search(string identidad)
+        public async Task<ShowPlanDto> Search(string identity)
         {
             ShowPlanDto planesDto = new ShowPlanDto();
 
@@ -168,7 +204,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
                     {
                         ParameterName = "@PlanName",
                         DbType = System.Data.DbType.String,
-                        Value = identidad
+                        Value = identity
                     }
 
                 }).ExecuteReaderAsync(async (reader) => 

@@ -9,14 +9,14 @@ namespace ArsAfiliados.Api.Controllers
 {
     [Route("api/affiliate")]
     [ApiController]
-    public class AffiliateController : BaseController
+    public class AffiliateEfcController : BaseController
     {
 
         [HttpGet]
-        [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.get.affiliates+json" })]
+        [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.affiliates+json" })]
         public async Task<IActionResult> Show()
         {
-            var showAffiliatesDto = await Affiliate.Show();
+            var showAffiliatesDto = await AffiliateEfc.Show();
 
             if (showAffiliatesDto.Count != 0)
                 if (showAffiliatesDto[0].IsError == true)
@@ -26,14 +26,14 @@ namespace ArsAfiliados.Api.Controllers
         }
 
 
-        [HttpGet]
-        [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.get.seach.affiliate+json" })]
-        public async Task<IActionResult> Show(string identificationCard)
+        [HttpGet("{identificationCard}")]
+        [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.seach.affiliate+json" })]
+        public async Task<IActionResult> Show([FromQuery] string identificationCard)
         {
             if (identificationCard == null)
                 return NotFound(new { error = "identificationCard is null" });
             
-            var showAffiliateDto = await Affiliate.Search(identificationCard);
+            var showAffiliateDto = await AffiliateEfc.Search(identificationCard);
 
             if (showAffiliateDto.IsError == true)
                 throw new System.Exception("an error occurred while getting the Affiliate.");
@@ -46,10 +46,10 @@ namespace ArsAfiliados.Api.Controllers
 
 
         [HttpPost]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.create.affiliate+json" })]
+        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.create.affiliate+json" })]
         public async Task<IActionResult> Create([FromBody] CreateAffiliateDto affiliateDto)
         {
-            if (!await Affiliate.Create(affiliateDto))
+            if (!await AffiliateEfc.Create(affiliateDto))
                 throw new System.Exception("an error occurred while creating the Affiliate");
 
             return NoContent();
@@ -57,10 +57,12 @@ namespace ArsAfiliados.Api.Controllers
 
 
         [HttpPatch]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.update.amonunt.affiliate+json" })]
+        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.update.amonunt.affiliate+json" })]
         public async Task<IActionResult> Update([FromBody] UpdateAmountAffiliateDto UpdateAmountaffiliateDto)
         {
-            if (!await Affiliate.UpdateAmountAffiliate(UpdateAmountaffiliateDto))
+            decimal NewAmountConsumed = UpdateAmountaffiliateDto.AmountConsumed + UpdateAmountaffiliateDto.NewAmount;
+
+            if (!await AffiliateEfc.UpdateAmountAffiliate(UpdateAmountaffiliateDto.IdentificationCard, NewAmountConsumed))
                 throw new System.Exception("an error occurred while updating the amount consumed from filing");
 
             return NoContent();
@@ -68,25 +70,25 @@ namespace ArsAfiliados.Api.Controllers
 
 
         [HttpPut]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.update.affiliate+json" })]
+        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.update.affiliate+json" })]
         public async Task<IActionResult> Update([FromBody] UpdateAffiliateDto affiliateDto)
         {
-            if (!await Affiliate.Update(affiliateDto))
+            if (!await AffiliateEfc.Update(affiliateDto))
                 throw new System.Exception("an error occurred while updating the Affiliate");
 
             return NoContent();
         }
 
 
-        [HttpPatch]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.changestatus.affiliate+json" })]
-        public async Task<IActionResult> ChangeStatus(string IdentificationCard, bool status)
+        [HttpPatch("{IdentificationCard, status}")]
+        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.changestatus.affiliate+json" })]
+        public async Task<IActionResult> ChangeStatus([FromQuery] string IdentificationCard, [FromQuery] bool status)
         {
 
             if (IdentificationCard == null)
                 return BadRequest(new { error = "identity is null" });
 
-            if (!await Affiliate.ChangeStatus(IdentificationCard, status))
+            if (!await AffiliateEfc.ChangeStatus(IdentificationCard, status))
                 throw new System.Exception("an error occurred while changing the affiliate status");
 
             return NoContent();

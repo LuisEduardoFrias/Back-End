@@ -32,6 +32,11 @@ namespace arsAfiliados.Authentication.Api
 
             services.AddMvc(setupAction =>
             {
+                setupAction.EnableEndpointRouting = false;
+
+                setupAction.ReturnHttpNotAcceptable = true;
+
+
                 var jsonInputFormatter = setupAction.InputFormatters.OfType<SystemTextJsonInputFormatter>().FirstOrDefault();
 
                 jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaf.createuser+json");

@@ -150,7 +150,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
 
                 }).ExecuteNonQueryAsync() != -1;
             }
-            catch { }
+            catch (System.Exception){ }
 
             return result;
 
@@ -239,7 +239,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
 
         }
 
-        public async Task<bool> UpdateAmountAffiliate(UpdateAmountAffiliateDto entityDto)
+        public async Task<bool> UpdateAmountAffiliate(string IdentificationCard, decimal NewAmountConsumed)
         {
             bool result = false;
 
@@ -251,13 +251,13 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
                     {
                         ParameterName = "@Id",
                         DbType = System.Data.DbType.Int32,
-                        Value = entityDto.Id
+                        Value = IdentificationCard
                     },
                     new SqlParameter
                     {
                         ParameterName = "@AmountConsumed",
                         DbType = System.Data.DbType.Decimal,
-                        Value = entityDto.AmountConsumed + entityDto.NewAmount
+                        Value = NewAmountConsumed
                     }
 
                 }).ExecuteNonQueryAsync() != -1;
@@ -268,7 +268,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
 
         }
 
-        public async Task<ShowAffiliateDto> Search(string search)
+        public async Task<ShowAffiliateDto> Search(string identity)
         {
             ShowAffiliateDto afiliado = new ShowAffiliateDto();
 
@@ -280,7 +280,7 @@ namespace ArsAfiliados.Persistence.RepositoryAdo
                     {
                         ParameterName = "@IdentificationCard",
                         DbType = System.Data.DbType.String,
-                        Value = search
+                        Value = identity
                     }
 
                 }).ExecuteReaderAsync(async (reader) => 

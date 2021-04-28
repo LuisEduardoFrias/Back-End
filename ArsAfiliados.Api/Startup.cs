@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using Microsoft.OpenApi.Models;
 //
 using ArsAfiliados.Service.SettingsStrings;
 //
@@ -35,29 +36,44 @@ namespace ArsAfiliados.Api
 
                 if (jsonOutputFormatter != null)
                 {
-                    //plan
-                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.get.plans+json");
-                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.get.search.plan+json");
+                    //plan ado.net
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.get.plans+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.get.search.plan+json");
+                    //plan entity framework core
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.get.plans+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.get.search.plan+json");
 
-                    //affilliate
-                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.get.affiliates+json");
-                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.get.seach.affiliate+json");
+                    //affilliate ado.net
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.get.affiliates+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.get.seach.affiliate+json");
+                    //affilliate entity framework core
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.get.affiliates+json");
+                    jsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.get.seach.affiliate+json");
                 }
 
                 var jsonInputFormatter = setupAction.InputFormatters.OfType<SystemTextJsonInputFormatter>().FirstOrDefault();
 
                 if (jsonInputFormatter != null)
                 {
-                    //plan
-                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.create.plan+json");
-                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.update.plan+json");
-                    jsonInputFormatter.SupportedMediaTypes.Add("application.vnd.arsaffiliate.changestatus.plan+json");
+                    //plan ado.net
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.create.plan+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.update.plan+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application.vnd.arsaffiliate.ado.changestatus.plan+json");
+                    //plan entity framework core
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.create.plan+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.update.plan+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application.vnd.arsaffiliate.efc.changestatus.plan+json");
 
-                    //affilliate
-                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.create.affiliate+json");
-                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.update.amonunt.affiliate+json");
-                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.update.affiliate+json");
-                    jsonInputFormatter.SupportedMediaTypes.Add("pplication/vnd.arsaffiliate.changestatus.affiliate+json");
+                    //affilliate ado.net
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.create.affiliate+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.update.amonunt.affiliate+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.update.affiliate+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.ado.changestatus.affiliate+json");
+                    //affilliate entity framework core
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.create.affiliate+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.update.amonunt.affiliate+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.update.affiliate+json");
+                    jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.efc.changestatus.affiliate+json");
                 }
 
             });
@@ -66,11 +82,23 @@ namespace ArsAfiliados.Api
             {
                 setupAction.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins(SettingsStrings.Getinstance().OneOriginWeb)
+                    policy
+                    //.WithOrigins(new string[] { SettingsStrings.Getinstance().OneOriginWeb })
+                    .AllowAnyOrigin()
                     .WithHeaders(new string[] { "Accept", "Content-Type" })
-                    .WithMethods(new string[]{ "HttpPost", "HttpGet", "HttpPut", "HttpPatch"});
+                    .WithMethods(new string[] { "HttpPost", "HttpGet", "HttpPut", "HttpPatch" });
+
+                    //'Access-Control-Allow-Origin', '*'
+                    //'Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT'
+
                 });
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Ars Afiliados", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,6 +108,13 @@ namespace ArsAfiliados.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwaggerUI();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Ars Afiliados V1");
+            });
 
             app.UseCors();
 

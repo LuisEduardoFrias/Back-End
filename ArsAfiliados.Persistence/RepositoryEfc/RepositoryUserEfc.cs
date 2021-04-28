@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 //
 using ArsAfiliados.Domain.Dtos;
 using ArsAfiliados.Service.SettingsStrings;
+using ArsAfiliados.Domain.Entitys;
 //
 
 namespace ArsAfiliados.Persistence.RepositoryEfc
@@ -30,14 +31,14 @@ namespace ArsAfiliados.Persistence.RepositoryEfc
         }
 
 
-        public async Task<RequestAuthenticationDto> CreateUser(UserCredentialsDto userCredentials)
+        public async Task<RequestAuthentication> CreateUser(CreateUserDto userCredentials)
         {
-            var user = new IdentityUser { UserName = userCredentials.Email, Email = userCredentials.Email };
+            var user = new IdentityUser { UserName = userCredentials.Name + userCredentials.LastName, Email = userCredentials.Email };
             var result = await _userManager.CreateAsync(user, userCredentials.Password);
 
             if (result.Succeeded)
             {
-                return await ConstrairToken(userCredentials);
+                return await ConstrairToken(userCredentials, userCredentials.Name);
             }
             else
             {
@@ -48,28 +49,29 @@ namespace ArsAfiliados.Persistence.RepositoryEfc
                     _error = $"{error.Code} {error.Description}";
                 }
 
-                return new RequestAuthenticationDto { Error = _error };
+                return new RequestAuthentication { Error = _error };
             }
 
         }
 
-        public async Task<RequestAuthenticationDto> Login(UserCredentialsDto userCredentials)
+
+        public async Task<RequestAuthentication> Login(LogerDto userCredentials, string UserName)
         {
             var respons = await _signManager.PasswordSignInAsync(userCredentials.Email, userCredentials.Password,
                 isPersistent: false, lockoutOnFailure: false);
 
             if (respons.Succeeded)
             {
-                return await ConstrairToken(userCredentials);
+                return await ConstrairToken(userCredentials, UserName);
             }
             else
             {
-                return new RequestAuthenticationDto { Error = "Usuario o contraseña incorrecta" };
+                return new RequestAuthentication { Error = "Usuario o contraseña incorrecta" };
             }
         }
 
 
-        private async Task<RequestAuthenticationDto> ConstrairToken(UserCredentialsDto userCredentials)
+        private async Task<RequestAuthentication> ConstrairToken(LogerDto userCredentials, string UserName)
         {
             var claims = new List<Claim>
             {
@@ -93,8 +95,9 @@ namespace ArsAfiliados.Persistence.RepositoryEfc
                 expires: expiration,
                 signingCredentials: creds);
 
-            return new RequestAuthenticationDto()
+            return new RequestAuthentication()
             {
+                UserName = UserName,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };

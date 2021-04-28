@@ -2,7 +2,7 @@
 
 namespace ArsAfiliados.Domain.Dtos
 {
-    public class UserCredentialsDto
+    public class LogerDto
     {
         [EmailAddress]
         [Required]
