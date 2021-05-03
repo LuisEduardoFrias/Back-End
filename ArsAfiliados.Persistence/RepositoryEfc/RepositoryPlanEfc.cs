@@ -13,7 +13,10 @@ using System.Linq;
 
 namespace ArsAfiliados.Persistence.RepositoryEfc
 {
-    public class RepositoryPlanEfc : RepositoryBaseEfc, IRepository<CreatePlanDto, UpdatePlanDto, ShowPlanDto>
+    public class RepositoryPlanEfc : RepositoryBaseEfc, 
+                                     IRepository<CreatePlanDto, UpdatePlanDto, ShowPlanDto>,
+                                     IRepositorySearch<ShowPlanDto>,
+                                     IRepositoryChangeStatus
     {
 
         #region Singletom

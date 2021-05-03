@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Microsoft.OpenApi.Models;
 //
-using ArsAfiliados.Service.SettingsStrings;
+using ArsAfiliados.Service.CorsOptions_;
 //
 
 namespace ArsAfiliados.Api
@@ -78,25 +78,12 @@ namespace ArsAfiliados.Api
 
             });
 
-            services.AddCors(setupAction =>
-            {
-                setupAction.AddDefaultPolicy(policy =>
-                {
-                    policy
-                    //.WithOrigins(new string[] { SettingsStrings.Getinstance().OneOriginWeb })
-                    .AllowAnyOrigin()
-                    .WithHeaders(new string[] { "Accept", "Content-Type" })
-                    .WithMethods(new string[] { "HttpPost", "HttpGet", "HttpPut", "HttpPatch" });
-
-                    //'Access-Control-Allow-Origin', '*'
-                    //'Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT'
-
-                });
-            });
+            services.AddCors(setupA => CorsOptionsSerivices.setupAction(setupA));
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Ars Afiliados", Version = "v1" });
+                c.SwaggerDoc("Documentacion Api Ars Afilidos", new OpenApiInfo 
+                { Title = "API Ars Afiliados", Version = "v1" });
             });
 
         }
@@ -104,17 +91,9 @@ namespace ArsAfiliados.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
 
             app.UseSwaggerUI();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Ars Afiliados V1");
-            });
 
             app.UseCors();
 

@@ -12,8 +12,5 @@ namespace ArsAfiliados.Persistence.Intefaces
 
         Task<bool> Update(U entityDto);
 
-        Task<S> Search(string identity);
-
-        Task<bool> ChangeStatus(string identity, bool status);
     }
 }

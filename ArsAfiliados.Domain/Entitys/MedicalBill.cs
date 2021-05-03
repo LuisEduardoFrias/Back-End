@@ -1,21 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-//
 
 namespace ArsAfiliados.Domain.Entitys
 {
-    public class Plan
+    public class MedicalBill
     {
         [Key]
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar(15)")]
         [Required]
-        public string PlanName { get; set; }
-
-        [Required]
-        public decimal CoverageAmount { get; set; }
+        public decimal TotalCost { get; set; }
 
         [Required]
         public DateTime RegistrationDate { get; set; }
@@ -23,5 +19,8 @@ namespace ArsAfiliados.Domain.Entitys
         [Column(TypeName = "bit")]
         [Required]
         public bool Status { get; set; }
+
+        [Required]
+        public ICollection<Service> Services { get; set; }
     }
 }

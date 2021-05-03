@@ -12,15 +12,15 @@ using System.Security.Claims;
 namespace ArsAfiliados.Authentication.Api.Controllers
 {
 
-    [Route("api/acount")]
+    [Route("api/account")]
     [ApiController]
-    public class AcountController : Controller
+    public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _UserManager;
         private readonly SignInManager<IdentityUser> _SignManager;
         private readonly IMapper _Mapper;
 
-        public AcountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper)
         {
             _UserManager = userManager;
             _SignManager = signManager;
@@ -29,7 +29,7 @@ namespace ArsAfiliados.Authentication.Api.Controllers
 
 
         [HttpPost]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaf.createuser+json" })]
+        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.createuser+json" })]
         public async Task<ActionResult<RequestAuthenticationDto>> CreateUser([FromBody] CreateUserDto CreateUserDto)
         {
             var request = await RepositoryUserEfc.GetInstance(_UserManager, _SignManager).CreateUser(CreateUserDto);
@@ -42,7 +42,7 @@ namespace ArsAfiliados.Authentication.Api.Controllers
 
 
         [HttpPost]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaf.loign+json" })]
+        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.loign+json" })]
         public async Task<ActionResult<RequestAuthenticationDto>> Login([FromBody] LogerDto login)
         {
             var user = _UserManager.GetUserAsync((ClaimsPrincipal)this.User.Identity);

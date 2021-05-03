@@ -12,8 +12,13 @@ namespace ArsAfiliados.Api.Controllers
         public readonly RepositoryAffiliateAdo AffiliateAdo;
         public readonly RepositoryPlanAdo PlanAdo;
 
+        // repository efc
         public readonly RepositoryAffiliateEfc AffiliateEfc;
         public readonly RepositoryPlanEfc PlanEfc;
+        public readonly RepositoryServiceEfc ServiceEfc;
+        public readonly RepositoryBranchOfficeEfc BranchOfficeEfc;
+        public readonly RepositoryMedicalBillEfc MedicalBillEfc;
+
 
         public BaseController()
         {
@@ -25,6 +30,10 @@ namespace ArsAfiliados.Api.Controllers
         {
             AffiliateEfc = RepositoryAffiliateEfc.GetInstance(context, mapper);
             PlanEfc = RepositoryPlanEfc.GetInstance(context, mapper);
+
+            ServiceEfc = RepositoryServiceEfc.GetInstance(context, mapper);
+            BranchOfficeEfc = RepositoryBranchOfficeEfc.GetInstance(context, mapper);
+            MedicalBillEfc = RepositoryMedicalBillEfc.GetInstance(context, mapper);
         }
     }
 }

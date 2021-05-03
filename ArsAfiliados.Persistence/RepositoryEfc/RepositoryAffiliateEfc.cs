@@ -12,7 +12,10 @@ using ArsAfiliados.Service.EntensionMethods;
 
 namespace ArsAfiliados.Persistence.RepositoryEfc
 {
-    public class RepositoryAffiliateEfc : RepositoryBaseEfc, IRepository<CreateAffiliateDto, UpdateAffiliateDto, ShowAffiliateDto>
+    public class RepositoryAffiliateEfc : RepositoryBaseEfc, 
+                                          IRepository<CreateAffiliateDto, UpdateAffiliateDto, ShowAffiliateDto>,
+                                          IRepositorySearch<ShowAffiliateDto>,
+                                          IRepositoryChangeStatus
     {
 
         #region Singletom

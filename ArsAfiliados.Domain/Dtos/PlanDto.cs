@@ -1,17 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace ArsAfiliados.Domain.Dtos
 {
     public class CreatePlanDto : ErrorDto
     {
+        [Required]
         public string PlanName { get; set; }
-        
+
+        [Required]
         public decimal CoverageAmount { get; set; }
-        
+
+        [Required]
         public DateTime RegistrationDate { get; set; }
 
+        [Required]
         public bool Status { get; set; }
     }
 
