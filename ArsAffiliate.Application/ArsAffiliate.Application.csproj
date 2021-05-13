@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArsAffiliate.Domain\ArsAffiliate.Domain.csproj" />
+    <ProjectReference Include="..\ArsAffiliate.Persistence\ArsAffiliate.Persistence.csproj" />
+    <ProjectReference Include="..\ArsAffiliate.Service\ArsAffiliate.Service.csproj" />
+  </ItemGroup>
+
+</Project>
