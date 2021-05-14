@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -39,9 +40,6 @@ namespace ArsAffiliate.Domain.Entitys
         [Required]
         public DateTime RegistrationDate { get; set; }
 
-        [Required]
-        public decimal AmountConsumed { get; set; }
-
         [Column(TypeName = "bit")]
         [Required]
         public bool Status { get; set; }
@@ -51,5 +49,7 @@ namespace ArsAffiliate.Domain.Entitys
 
         [ForeignKey("PlanId")]
         public Plan Plan { get; set; }
+
+        public ICollection<MedicalBill> MedicalBills { get; set; }
     }
 }

@@ -30,9 +30,6 @@ namespace ArsAffiliate.Domain.Dtos.Affiliate
         public DateTime RegistrationDate { get; set; }
 
         [Required]
-        public decimal AmountConsumed { get; set; }
-
-        [Required]
         public bool Status { get; set; }
 
         [Required]

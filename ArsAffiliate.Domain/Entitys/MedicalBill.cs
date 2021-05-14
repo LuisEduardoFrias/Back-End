@@ -21,6 +21,8 @@ namespace ArsAffiliate.Domain.Entitys
         public bool Status { get; set; }
 
         [Required]
+        public Affiliate Affiliate { get; set; }
+
         public ICollection<Service> Services { get; set; }
     }
 }

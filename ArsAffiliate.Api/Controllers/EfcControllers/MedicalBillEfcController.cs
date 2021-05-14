@@ -1,6 +1,7 @@
 ﻿using ArsAffiliate.Domain.Dtos.MedicalBill;
 using ArsAffiliate.Service.RequestHeaderMatchMadiaType;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Api.Controllers
@@ -12,36 +13,17 @@ namespace ArsAffiliate.Api.Controllers
 
         [HttpGet]
         [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.medicalbill+json" })]
-        public async Task<IActionResult> Show()
+        public async Task<ActionResult<List<ShowMedicalBillDto>>> Show()
         {
-            //var showMedicalBillsDto = await MedicalBillEfc.Show();
-
-            //if (showMedicalBillsDto.Count != 0)
-            //    if (showMedicalBillsDto[0].IsError == true)
-            //        throw new System.Exception("an error occurred while getting the medical bill collection.");
-
-            //return Ok(showMedicalBillsDto);
-            return NoContent();
+            return await applicationMedicalBill.ShowAsync();
         }
 
 
         [HttpGet("{identificationCard}")]
         [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.seach.medicalbill+json" })]
-        public async Task<IActionResult> Show([FromQuery] string identificationCard)
+        public async Task<ActionResult<List<ShowMedicalBillDto>>> Show([FromQuery] string filter)
         {
-            //if (identificationCard == null)
-            //    return NotFound(new { error = "identificationCard is null" });
-
-            //var showMedicalBillDto = await MedicalBillEfc.Search(identificationCard);
-
-            //if (showMedicalBillDto.IsError == true)
-            //    throw new System.Exception("an error occurred while getting the medical bill.");
-
-            //if (showMedicalBillDto.Id == default)
-            //    return NotFound(new { Error = "affiliate not found" });
-
-            //return Ok(showMedicalBillDto);
-            return NoContent();
+            return await applicationMedicalBill.ShowAsync(filter);
         }
 
 
@@ -49,10 +31,7 @@ namespace ArsAffiliate.Api.Controllers
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.create.medicalbill+json" })]
         public async Task<IActionResult> Create([FromBody] CreateMedicalBillDto medicalbillDto)
         {
-            //if (!await MedicalBillEfc.Create(medicalbillDto))
-            //    throw new System.Exception("an error occurred while creating the medical bill");
-
-            return NoContent();
+            return await applicationMedicalBill.CreateAsync(medicalbillDto);
         }
 
 
@@ -60,11 +39,7 @@ namespace ArsAffiliate.Api.Controllers
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.update.medicalbill+json" })]
         public async Task<IActionResult> Update([FromBody] UpdateMedicalBillDto medicalbillDto)
         {
-            //if (!await MedicalBillEfc.Update(medicalbillDto))
-            //    throw new System.Exception("an error occurred while updating the medical bill");
-
-            return NoContent();
+            return await applicationMedicalBill.UpdateAsync(medicalbillDto);
         }
-
     }
 }

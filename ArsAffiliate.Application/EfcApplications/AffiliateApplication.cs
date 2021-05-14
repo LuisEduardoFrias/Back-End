@@ -3,11 +3,12 @@ using ArsAffiliate.Domain.Entitys;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArsAffiliate.Application
+namespace ArsAffiliate.Application.EfcApplications
 {
     public class AffiliateApplication : BaseApplicationController
     {
@@ -31,7 +32,7 @@ namespace ArsAffiliate.Application
 
         public async Task<ActionResult<List<ShowAffiliateDto>>> ShowAsync(string filter = null)
         {
-            var query = AffiliateEfc.Show();
+            IQueryable<Affiliate> query = AffiliateEfc.Show();
 
             if (filter == null)
                 return _mapper.Map<List<ShowAffiliateDto>>(await query.ToListAsync());
@@ -41,10 +42,25 @@ namespace ArsAffiliate.Application
                 .ToListAsync());
         }
 
+        public async Task<ActionResult<List<ShowAffiliateDto>>> AmountConsumed(int id, DateTime sinceDate, DateTime tillDate)
+        {
+            Affiliate afiliate = await AffiliateEfc.AmountConsumedAsync(id);
+
+            if (afiliate == null)
+            {
+               IEnumerable<MedicalBill> medicalBills =  afiliate.MedicalBills.Where(x => x.RegistrationDate.CompareTo(sinceDate) == 0 && x.RegistrationDate.CompareTo(tillDate) == 0);
+
+
+                return _mapper.Map<List<ShowAffiliateDto>>(medicalBills);
+            }
+
+            throw new System.Exception();
+        }
+
         public async Task<ActionResult> CreateAsync(CreateAffiliateDto affiliateDto)
         {
             if (!await AffiliateEfc.Create(_mapper.Map<Affiliate>(affiliateDto)))
-                throw new System.Exception("an error occurred while creating the Affiliate");
+                throw new System.Exception("Affiliate not found");
 
             return NoContent();
         }

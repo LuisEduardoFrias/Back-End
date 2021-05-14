@@ -1,4 +1,4 @@
-﻿using ArsAffiliate.Application;
+﻿using ArsAffiliate.Application.EfcApplications;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,11 +24,11 @@ namespace ArsAffiliate.Api.Controllers
 
         public BaseController(Persistence.Data.PersistencsDataContext context, IMapper mapper)
         {
-            applicationAffiliate = AffiliateApplication.GetInstance( mapper);
-            applicationPlan = PlanEfcApplication.GetInstance(mapper);
-            applicationService = ServiceEfcApplication.GetInstance(mapper);
-            applicationBranchOffice = BranchOfficeEfcApplication.GetInstance(mapper);
-            applicationMedicalBill = MedicalBillEfcApplication.GetInstance(mapper);
+            applicationAffiliate = AffiliateApplication.GetInstance(context, mapper);
+            applicationPlan = PlanEfcApplication.GetInstance(context, mapper);
+            applicationService = ServiceEfcApplication.GetInstance(context, mapper);
+            applicationBranchOffice = BranchOfficeEfcApplication.GetInstance(context, mapper);
+            applicationMedicalBill = MedicalBillEfcApplication.GetInstance(context, mapper);
         }
     }
 }

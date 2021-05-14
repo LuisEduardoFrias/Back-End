@@ -49,6 +49,11 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
             return await SaveAsync();
         }
 
+        public async Task<Affiliate> AmountConsumedAsync(int id)
+        {
+            return await _Context.Affiliates.Include(x => x.MedicalBills).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<bool> ChangeStatus(int id, bool status)
         {
             Affiliate affiliate = await _Context.Affiliates.FirstOrDefaultAsync(x => x.Id == id.ToInt());

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArsAffiliate.Application
+namespace ArsAffiliate.Application.EfcApplications
 {
     public class ServiceEfcApplication : BaseApplicationController
     {
@@ -30,7 +30,7 @@ namespace ArsAffiliate.Application
 
         public async Task<ActionResult<List<ShowServiceDto>>> ShowAsync(string filter = null)
         {
-            var query = ServiceEfc.Show();
+            IQueryable<Domain.Entitys.Service> query = ServiceEfc.Show();
 
             if (filter == null)
                 return _mapper.Map<List<ShowServiceDto>>(await query.ToListAsync());

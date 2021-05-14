@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArsAffiliate.Application
+namespace ArsAffiliate.Application.EfcApplications
 {
     public class MedicalBillEfcApplication : BaseApplicationController
     {
@@ -31,7 +31,7 @@ namespace ArsAffiliate.Application
 
         public async Task<ActionResult<List<ShowMedicalBillDto>>> ShowAsync(string filter = null)
         {
-            var query = MedicalBillEfc.Show();
+            IQueryable<MedicalBill> query = MedicalBillEfc.Show();
 
             if (filter == null)
                 return _mapper.Map<List<ShowMedicalBillDto>>(await query.ToListAsync());

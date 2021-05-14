@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ArsAffiliate.Service\ArsAffiliate.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AdoApplications\" />
+  </ItemGroup>
+
 </Project>

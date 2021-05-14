@@ -1,6 +1,7 @@
 ﻿using ArsAffiliate.Domain.Dtos.Service;
 using ArsAffiliate.Service.RequestHeaderMatchMadiaType;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Api.Controllers
@@ -12,36 +13,17 @@ namespace ArsAffiliate.Api.Controllers
 
         [HttpGet]
         [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.service+json" })]
-        public async Task<IActionResult> Show()
+        public async Task<ActionResult<List<ShowServiceDto>>> Show()
         {
-        //    var showServiceaDto = await ServiceEfc.Show();
-
-        //    if (showServiceaDto.Count != 0)
-        //        if (showServiceaDto[0].IsError == true)
-        //            throw new System.Exception("an error occurred while getting the Servicea collection.");
-
-        //    return Ok(showServiceaDto);
-            return NoContent();
+            return await applicationService.ShowAsync();
         }
 
 
         [HttpGet("{identificationCard}")]
         [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.seach.service+json" })]
-        public async Task<IActionResult> Show([FromQuery] string identificationCard)
+        public async Task<ActionResult<List<ShowServiceDto>>> Show([FromQuery] string filter)
         {
-        //if (identificationCard == null)
-        //    return NotFound(new { error = "identificationCard is null" });
-
-        //var showServiceDto = await ServiceEfc.Search(identificationCard);
-
-        //if (showServiceDto.IsError == true)
-        //    throw new System.Exception("an error occurred while getting the Affiliate.");
-
-        //if (showServiceDto.Id == default)
-        //    return NotFound(new { Error = "service not found" });
-
-        //return Ok(showServiceDto);
-        return NoContent();
+            return await applicationService.ShowAsync(filter);
         }
 
 
@@ -49,10 +31,7 @@ namespace ArsAffiliate.Api.Controllers
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.create.service+json" })]
         public async Task<IActionResult> Create([FromBody] CreateServiceDto affiliateDto)
         {
-            //if (!await ServiceEfc.Create(affiliateDto))
-            //    throw new System.Exception("an error occurred while creating the service");
-
-            return NoContent();
+            return await applicationService.CreateAsync(affiliateDto);
         }
 
 
@@ -60,27 +39,15 @@ namespace ArsAffiliate.Api.Controllers
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.update.service+json" })]
         public async Task<IActionResult> Update([FromBody] UpdateServiceDto serviceDto)
         {
-            //if (!await ServiceEfc.Update(serviceDto))
-            //    throw new System.Exception("an error occurred while updating the service");
-
-            return NoContent();
+            return await applicationService.UpdateAsync(serviceDto);
         }
 
 
         [HttpPatch("{IdentificationCard, status}")]
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.changestatus.service+json" })]
-        public async Task<IActionResult> ChangeStatus([FromQuery] string IdentificationCard, [FromQuery] bool status)
+        public async Task<IActionResult> ChangeStatus([FromQuery] int id, [FromQuery] bool status)
         {
-
-            //if (IdentificationCard == null)
-            //    return BadRequest(new { error = "identity is null" });
-
-            //if (!await ServiceEfc.ChangeStatus(IdentificationCard, status))
-            //    throw new System.Exception("an error occurred while changing the service status");
-
-            return NoContent();
+            return await applicationService.ChangeStatusAsync(id, status);
         }
-
-
     }
 }

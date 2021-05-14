@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArsAffiliate.Application
+namespace ArsAffiliate.Application.EfcApplications
 {
     public class PlanEfcApplication : BaseApplicationController
     {
@@ -31,13 +31,22 @@ namespace ArsAffiliate.Application
 
         public async Task<ActionResult<List<ShowPlanDto>>> ShowAsync(string filter = null)
         {
-            var query = PlanEfc.Show();
+            IQueryable<Plan> query = PlanEfc.Show();
 
             if (filter == null)
                 return _mapper.Map<List<ShowPlanDto>>(await query.ToListAsync());
 
             return _mapper.Map<List<ShowPlanDto>>(await query
                 .Where(x => x.PlanName.Contains(filter))
+                .ToListAsync());
+        }
+
+        public async Task<ActionResult<List<ShowPlanDto>>> ShowWhereStatusTrueAsync()
+        {
+            var query = PlanEfc.Show();
+
+            return _mapper.Map<List<ShowPlanDto>>(await query
+                .Where(x => x.Status == true)
                 .ToListAsync());
         }
 

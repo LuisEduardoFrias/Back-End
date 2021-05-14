@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArsAffiliate.Application
+namespace ArsAffiliate.Application.EfcApplications
 {
     public class BranchOfficeEfcApplication : BaseApplicationController
     {
@@ -31,7 +31,7 @@ namespace ArsAffiliate.Application
 
         public async Task<ActionResult<List<ShowBranchOfficeDto>>> ShowAsync(string filter = null)
         {
-            var query = BranchOfficeEfc.Show();
+            IQueryable<BranchOffice> query = BranchOfficeEfc.Show();
 
             if (filter == null)
                 return _mapper.Map<List<ShowBranchOfficeDto>>(await query.ToListAsync());

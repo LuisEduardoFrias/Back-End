@@ -1,14 +1,16 @@
 ﻿using ArsAffiliate.Domain.Dtos.Plan;
+using ArsAffiliate.Domain.Entitys;
 using ArsAffiliate.Persistence.Data;
 using ArsAffiliate.Persistence.Intefaces;
 using ArsAffiliate.Service.EntensionMethods;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Persistence.RepositoryAdo
 {
-    public class RepositoryPlanAdo : IRepository<CreatePlanDto, UpdatePlanDto, ShowPlanDto>
+    public class RepositoryPlanAdo : IRepository<Plan>
     {
 
         #region Singletom
@@ -257,5 +259,19 @@ namespace ArsAffiliate.Persistence.RepositoryAdo
             return result;
         }
 
+        IQueryable<Plan> IRepository<Plan>.Show()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> Create(Plan entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> Update(Plan entity)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

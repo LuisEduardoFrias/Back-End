@@ -1,15 +1,17 @@
 ﻿using ArsAffiliate.Domain.Dtos.Affiliate;
 using ArsAffiliate.Domain.Dtos.Plan;
+using ArsAffiliate.Domain.Entitys;
 using ArsAffiliate.Persistence.Data;
 using ArsAffiliate.Persistence.Intefaces;
 using ArsAffiliate.Service.EntensionMethods;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Persistence.RepositoryAdo
 {
-    public class RepositoryAffiliateAdo : IRepository<CreateAffiliateDto, UpdateAffiliateDto, ShowAffiliateDto>
+    public class RepositoryAffiliateAdo : IRepository<Affiliate>
     {
 
         #region Singletom
@@ -350,5 +352,19 @@ namespace ArsAffiliate.Persistence.RepositoryAdo
             return result;
         }
 
+        IQueryable<Affiliate> IRepository<Affiliate>.Show()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> Create(Affiliate entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> Update(Affiliate entity)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
