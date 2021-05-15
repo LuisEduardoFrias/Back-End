@@ -1,5 +1,6 @@
 ﻿using ArsAffiliate.Domain.Dtos.Plan;
 using ArsAffiliate.Service.RequestHeaderMatchMadiaType;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,12 @@ namespace ArsAffiliate.Api.Controllers
     [ApiController]
     public class PlanEfcController : BaseController
     {
+
+        public PlanEfcController(Persistence.Data.PersistencsDataContext context, IMapper mapper) : base(context, mapper)
+        {
+        }
+
+
         [HttpGet]
         [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.plans+json" })]
         public async Task<ActionResult<List<ShowPlanDto>>> Show()

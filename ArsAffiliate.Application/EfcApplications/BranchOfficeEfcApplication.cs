@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Application.EfcApplications
@@ -44,25 +45,25 @@ namespace ArsAffiliate.Application.EfcApplications
         public async Task<ActionResult> CreateAsync(CreateBranchOfficeDto BranchOfficeDto)
         {
             if (!await BranchOfficeEfc.Create(_mapper.Map<BranchOffice>(BranchOfficeDto)))
-                throw new System.Exception("an error occurred while creating the BranchOffice");
+                throw new HttpResponseException { MensajeError = "an error occurred while creating the BranchOffice" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
         public async Task<ActionResult> UpdateAsync(UpdateBranchOfficeDto BranchOfficeDto)
         {
             if (!await BranchOfficeEfc.Update(_mapper.Map<BranchOffice>(BranchOfficeDto)))
-                throw new System.Exception("an error occurred while updating the BranchOffice");
+                throw new HttpResponseException { MensajeError = "an error occurred while updating the BranchOffice" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
         public async Task<ActionResult> ChangeStatusAsync(int id, bool status)
         {
             if (!await BranchOfficeEfc.ChangeStatus(id, status))
-                throw new System.Exception("an error occurred while changing the BranchOffice status");
+                throw new HttpResponseException { MensajeError = "an error occurred while changing the BranchOffice status" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }

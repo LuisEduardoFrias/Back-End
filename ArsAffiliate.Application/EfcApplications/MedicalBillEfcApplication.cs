@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Application.EfcApplications
@@ -47,25 +48,25 @@ namespace ArsAffiliate.Application.EfcApplications
         public async Task<ActionResult> CreateAsync(CreateMedicalBillDto MedicalBillDto)
         {
             if (!await MedicalBillEfc.Create(_mapper.Map<MedicalBill>(MedicalBillDto)))
-                throw new System.Exception("an error occurred while creating the MedicalBill");
+                throw new HttpResponseException { MensajeError = "an error occurred while creating the MedicalBill" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
         public async Task<ActionResult> UpdateAsync(UpdateMedicalBillDto MedicalBillDto)
         {
             if (!await MedicalBillEfc.Update(_mapper.Map<MedicalBill>(MedicalBillDto)))
-                throw new System.Exception("an error occurred while updating the MedicalBill");
+                throw new HttpResponseException { MensajeError = "an error occurred while updating the MedicalBill" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
         public async Task<ActionResult> ChangeStatusAsync(int id, bool status)
         {
             if (!await MedicalBillEfc.ChangeStatus(id, status))
-                throw new System.Exception("an error occurred while changing the MedicalBill status");
+                throw new HttpResponseException { MensajeError = "an error occurred while changing the MedicalBill status" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }

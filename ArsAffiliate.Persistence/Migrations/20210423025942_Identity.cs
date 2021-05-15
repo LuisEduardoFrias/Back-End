@@ -242,201 +242,201 @@ namespace ArsAffiliate.Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
 
-            migrationBuilder.Sql(@"
--- Plan procedures
+//            migrationBuilder.Sql(@"
+//-- Plan procedures
 
-create proc ShowPlans
-as
-begin
+//create proc ShowPlans
+//as
+//begin
 
-	select * from Plans
+//	select * from Plans
 
-end
-go
-
-
-create proc CreatePlan
-@PlanName varchar(25),
-@CoverageAmount decimal,
-@RegistrationDate datetime,
-@Status bit
-as
-begin
-
-	Insert into Plans values (
-	@PlanName,
-	@CoverageAmount,
-	@RegistrationDate,
-	@Status)
-
-end
-go
+//end
+//go
 
 
-create proc UpdatePlan 
-@Id int,
-@PlanName varchar(25),
-@CoverageAmount decimal,
-@RegistrationDate datetime,
-@Status bit
-as
-begin
+//create proc CreatePlan
+//@PlanName varchar(25),
+//@CoverageAmount decimal,
+//@RegistrationDate datetime,
+//@Status bit
+//as
+//begin
 
-	Update Plans set
-	PlanName = @PlanName,             
-	CoverageAmount = @CoverageAmount,				
-	RegistrationDate = @RegistrationDate ,		
-	Status = @Status
-	where  
-	Id = @Id
+//	Insert into Plans values (
+//	@PlanName,
+//	@CoverageAmount,
+//	@RegistrationDate,
+//	@Status)
 
-end
-go
+//end
+//go
 
 
-CREATE proc SearchPlan @PlanName varchar(25)
-as
-begin
+//create proc UpdatePlan 
+//@Id int,
+//@PlanName varchar(25),
+//@CoverageAmount decimal,
+//@RegistrationDate datetime,
+//@Status bit
+//as
+//begin
 
-	select * from Plans where PlanName =  @PlanName
+//	Update Plans set
+//	PlanName = @PlanName,             
+//	CoverageAmount = @CoverageAmount,				
+//	RegistrationDate = @RegistrationDate ,		
+//	Status = @Status
+//	where  
+//	Id = @Id
 
-end
-
-
-Create proc ChangeStatusPlan @Id int, @Status int
-as
-begin
-
-	Update Plans set 
-	Status = @Status
-	where  
-	Id = @Id
-
-end
-go
-
-
--- Affiliate procedures
-
-create proc ShowAffiliate
-as
-begin
-
-	select * from Affiliates as A 
-	Join Plans as P on A.PlanId = P.Id;
-
-end
-go
+//end
+//go
 
 
-create proc Createaffiliate
-@Name              varchar(50),
-@LastName			varchar(50),
-@Date			DateTime,
-@Nacionality 			varchar(25),
-@Sex				char(1),
-@IdentificationCard			char(11),
-@SocialSecurityNumber	varchar(25),
-@RegistrationDate		datetime,
-@AmountConsumed		decimal,
-@Status		int,
-@PlanId			int
-as
-begin
+//create proc SearchPlan @PlanName varchar(25)
+//as
+//begin
 
-	Insert into Affiliates values (
-	 @Name             
-	,@LastName			
-	,@Date				
-	,@Nacionality 		
-	,@Sex					
-	,@IdentificationCard
-	,@SocialSecurityNumber
-	,@RegistrationDate		
-	,@AmountConsumed		
-	,@Status			
-	,@PlanId)
+//	select * from Plans where PlanName =  @PlanName
 
-end
-go
+//end
 
 
-create proc UpdateAffiliate
-@Id int,
-@Name              varchar(50),
-@LastName			varchar(50),
-@Date			DateTime,
-@Nacionality 			varchar(25),
-@Sex				char(1),
-@IdentificationCard			char(11),
-@SocialSecurityNumber	varchar(25),
-@RegistrationDate		datetime,
-@AmountConsumed		decimal,
-@Status		int,
-@PlanId			int
-as
-begin
+//create proc ChangeStatusPlan @Id int, @Status bit
+//as
+//begin
 
-	Update Affiliates set
-	Name= @Name,             
-	LastName= @LastName,			
-	Date= @Date	,			
-	Nacionality= @Nacionality ,		
-	Sex= @Sex	,			
-	IdentificationCard= @IdentificationCard		,		
-	SocialSecurityNumber= @SocialSecurityNumber	,
-	RegistrationDate= @RegistrationDate		,
-	AmountConsumed= @AmountConsumed	,	
-	Status= @Status	,		
-	PlanId= @PlanId	
-	where  
-	Id = @Id
+//	Update Plans set 
+//	Status = @Status
+//	where  
+//	Id = @Id
 
-end
-go
+//end
+//go
 
 
-create proc UpdateAmountAffiliate
-@Id int,
-@AmountConsumed		decimal
-as
-begin
+//-- Affiliate procedures
 
-	Update Affiliates set
-	AmountConsumed = @AmountConsumed	
-	where  
-	Id = @Id
+//create proc ShowAffiliate
+//as
+//begin
 
-end
-go
+//	select * from Affiliates as A 
+//	Join Plans as P on A.PlanId = P.Id;
+
+//end
+//go
 
 
-Create proc SearchAffiliate @IdentificationCard char(11)
-as
-begin
+//create proc Createaffiliate
+//@Name              varchar(50),
+//@LastName			varchar(50),
+//@Date			DateTime,
+//@Nacionality 			varchar(25),
+//@Sex				char(1),
+//@IdentificationCard			char(11),
+//@SocialSecurityNumber	varchar(25),
+//@RegistrationDate		datetime,
+//@AmountConsumed		decimal,
+//@Status		int,
+//@PlanId			int
+//as
+//begin
 
-		select * from Affiliates as A 
-		Join Plans as P on A.PlanId = P.Id 
-		where 
-		Name =  @Search or
-		LastName =   @Search or
-		IdentificationCard =  @IdentificationCard;
+//	Insert into Affiliates values (
+//	 @Name             
+//	,@LastName			
+//	,@Date				
+//	,@Nacionality 		
+//	,@Sex					
+//	,@IdentificationCard
+//	,@SocialSecurityNumber
+//	,@RegistrationDate		
+//	,@AmountConsumed		
+//	,@Status			
+//	,@PlanId)
 
-end
-go
+//end
+//go
 
 
-Create proc ChangeStatusAffiliate @IdentificationCard char(11), @Status int
-as
-begin
+//create proc UpdateAffiliate
+//@Id int,
+//@Name              varchar(50),
+//@LastName			varchar(50),
+//@Date			DateTime,
+//@Nacionality 			varchar(25),
+//@Sex				char(1),
+//@IdentificationCard			char(11),
+//@SocialSecurityNumber	varchar(25),
+//@RegistrationDate		datetime,
+//@AmountConsumed		decimal,
+//@Status		int,
+//@PlanId			int
+//as
+//begin
 
-	Update Affiliates set 
-	Status = @Status
-	where  
-	IdentificationCard = @IdentificationCard
+//	Update Affiliates set
+//	Name= @Name,             
+//	LastName= @LastName,			
+//	Date= @Date	,			
+//	Nacionality= @Nacionality ,		
+//	Sex= @Sex	,			
+//	IdentificationCard= @IdentificationCard		,		
+//	SocialSecurityNumber= @SocialSecurityNumber	,
+//	RegistrationDate= @RegistrationDate		,
+//	AmountConsumed= @AmountConsumed	,	
+//	Status= @Status	,		
+//	PlanId= @PlanId	
+//	where  
+//	Id = @Id
 
-end
-go", true);
+//end
+//go
+
+
+//create proc UpdateAmountAffiliate
+//@Id int,
+//@AmountConsumed		decimal
+//as
+//begin
+
+//	Update Affiliates set
+//	AmountConsumed = @AmountConsumed	
+//	where  
+//	Id = @Id
+
+//end
+//go
+
+
+//Create proc SearchAffiliate @IdentificationCard char(11)
+//as
+//begin
+
+//		select * from Affiliates as A 
+//		Join Plans as P on A.PlanId = P.Id 
+//		where 
+//		Name =  @Search or
+//		LastName =   @Search or
+//		IdentificationCard =  @IdentificationCard;
+
+//end
+//go
+
+
+//Create proc ChangeStatusAffiliate @IdentificationCard char(11), @Status int
+//as
+//begin
+
+//	Update Affiliates set 
+//	Status = @Status
+//	where  
+//	IdentificationCard = @IdentificationCard
+
+//end
+//go", true);
 
         }
 

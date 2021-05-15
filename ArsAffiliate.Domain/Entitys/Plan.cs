@@ -13,6 +13,7 @@ namespace ArsAffiliate.Domain.Entitys
         [Required]
         public string PlanName { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         [Required]
         public decimal CoverageAmount { get; set; }
 

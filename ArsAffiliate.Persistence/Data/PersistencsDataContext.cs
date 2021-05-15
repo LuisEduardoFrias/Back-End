@@ -18,15 +18,15 @@ namespace ArsAffiliate.Persistence.Data
         #endregion
 
 
-        public PersistencsDataContext() : base()
+        public PersistencsDataContext(DbContextOptions<PersistencsDataContext> options) : base(options)
         {
         }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"server=DESKTOP-9BPNFM1\SQLEXPRESS; database=ArsAfiliados; Trusted_Connection=True;");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"server=DESKTOP-9BPNFM1\SQLEXPRESS; database=ArsAfiliados; Trusted_Connection=True;");
+        //}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

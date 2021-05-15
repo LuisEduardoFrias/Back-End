@@ -1,5 +1,6 @@
 ﻿using ArsAffiliate.Domain.Dtos.MedicalBill;
 using ArsAffiliate.Service.RequestHeaderMatchMadiaType;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,11 @@ namespace ArsAffiliate.Api.Controllers
     [ApiController]
     public class MedicalBillEfcController : BaseController
     {
+
+        public MedicalBillEfcController(Persistence.Data.PersistencsDataContext context, IMapper mapper) : base(context, mapper)
+        {
+        }
+
 
         [HttpGet]
         [RequestHeaderMatchMadiaType("Accept", new string[] { "application/vnd.arsaffiliate.efc.get.medicalbill+json" })]

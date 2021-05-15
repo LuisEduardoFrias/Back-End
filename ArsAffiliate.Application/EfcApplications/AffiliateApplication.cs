@@ -1,11 +1,11 @@
 ﻿using ArsAffiliate.Domain.Dtos.Affiliate;
 using ArsAffiliate.Domain.Entitys;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ArsAffiliate.Application.EfcApplications
@@ -30,55 +30,56 @@ namespace ArsAffiliate.Application.EfcApplications
         {
         }
 
-        public async Task<ActionResult<List<ShowAffiliateDto>>> ShowAsync(string filter = null)
+        public async Task<List<ShowAffiliateDto>> ShowAsync(string filter = null)
         {
             IQueryable<Affiliate> query = AffiliateEfc.Show();
 
             if (filter == null)
                 return _mapper.Map<List<ShowAffiliateDto>>(await query.ToListAsync());
 
-            return _mapper.Map<List<ShowAffiliateDto>>(await query
-                .Where(x => x.IdentificationCard.Contains(filter) || x.Name.Contains(filter))
-                .ToListAsync());
+            return _mapper.Map<List<ShowAffiliateDto>>(
+                    await query
+                    .Where(x => x.IdentificationCard.Contains(filter) || x.Name.Contains(filter))
+                    .ToListAsync());
         }
 
-        public async Task<ActionResult<List<ShowAffiliateDto>>> AmountConsumed(int id, DateTime sinceDate, DateTime tillDate)
+        public async Task<List<ShowAffiliateDto>> AmountConsumed(int id, DateTime sinceDate, DateTime tillDate)
         {
             Affiliate afiliate = await AffiliateEfc.AmountConsumedAsync(id);
 
             if (afiliate == null)
             {
-               IEnumerable<MedicalBill> medicalBills =  afiliate.MedicalBills.Where(x => x.RegistrationDate.CompareTo(sinceDate) == 0 && x.RegistrationDate.CompareTo(tillDate) == 0);
+                IEnumerable<MedicalBill> medicalBills = afiliate.MedicalBills.Where(x => x.RegistrationDate.CompareTo(sinceDate) == 0 && x.RegistrationDate.CompareTo(tillDate) == 0);
 
 
                 return _mapper.Map<List<ShowAffiliateDto>>(medicalBills);
             }
 
-            throw new System.Exception();
+            throw new HttpResponseException { MensajeError = "There are no records ... ", StatusCode = HttpStatusCode.BadRequest };
         }
 
-        public async Task<ActionResult> CreateAsync(CreateAffiliateDto affiliateDto)
+        public async Task CreateAsync(CreateAffiliateDto affiliateDto)
         {
             if (!await AffiliateEfc.Create(_mapper.Map<Affiliate>(affiliateDto)))
-                throw new System.Exception("Affiliate not found");
+                throw new HttpResponseException { MensajeError = "There are no records ... " };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
-        public async Task<ActionResult> UpdateAsync(UpdateAffiliateDto affiliateDto)
+        public async Task UpdateAsync(UpdateAffiliateDto affiliateDto)
         {
             if (!await AffiliateEfc.Update(_mapper.Map<Affiliate>(affiliateDto)))
-                throw new System.Exception("an error occurred while updating the Affiliate");
+                throw new HttpResponseException { MensajeError = "an error occurred while updating the Affiliate" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
-        public async Task<ActionResult> ChangeStatusAsync(int id, bool status)
+        public async Task ChangeStatusAsync(int id, bool status)
         {
             if (!await AffiliateEfc.ChangeStatus(id, status))
-                throw new System.Exception("an error occurred while changing the affiliate status");
+                throw new HttpResponseException { MensajeError = "an error occurred while changing the affiliate status" };
 
-            return NoContent();
+            throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }

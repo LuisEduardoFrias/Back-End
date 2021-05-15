@@ -58,7 +58,6 @@ namespace ArsAffiliate.Persistence.RepositoryAdo
                             IdentificationCard = reader["IdentificationCard"].ToString(),
                             SocialSecurityNumber = reader["SocialSecurityNumber"].ToString(),
                             RegistrationDate = reader["RegistrationDate"].ToDateTime(),
-                            AmountConsumed = reader["AmountConsumed"].ToDecimal(),
                             Status = reader["Status"].ToBool(),
                             PlanId = reader["PlanId"].ToInt(),
                             Plan = new ShowPlanDto
@@ -132,11 +131,6 @@ namespace ArsAffiliate.Persistence.RepositoryAdo
                         ParameterName = "@RegistrationDate",
                         DbType = System.Data.DbType.DateTime,
                         Value = entityDto.RegistrationDate
-                    },new SqlParameter
-                    {
-                        ParameterName = "@AmountConsumed",
-                        DbType = System.Data.DbType.Decimal,
-                        Value = entityDto.AmountConsumed
                     },new SqlParameter
                     {
                         ParameterName = "@Status",
@@ -217,11 +211,6 @@ namespace ArsAffiliate.Persistence.RepositoryAdo
                         Value = entityDto.RegistrationDate
                     },new SqlParameter
                     {
-                        ParameterName = "@AmountConsumed",
-                        DbType = System.Data.DbType.Decimal,
-                        Value = entityDto.AmountConsumed
-                    },new SqlParameter
-                    {
                         ParameterName = "@Status",
                         DbType = System.Data.DbType.Boolean,
                         Value = entityDto.Status
@@ -299,7 +288,6 @@ namespace ArsAffiliate.Persistence.RepositoryAdo
                             IdentificationCard = reader["IdentificationCard"].ToString(),
                             SocialSecurityNumber = reader["SocialSecurityNumber"].ToString(),
                             RegistrationDate = reader["RegistrationDate"].ToDateTime(),
-                            AmountConsumed = reader["AmountConsumed"].ToDecimal(),
                             Status = reader["Status"].ToBool(),
                             PlanId = reader["PlanId"].ToInt(),
                             Plan = new ShowPlanDto

@@ -65,14 +65,5 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
             return await SaveAsync();
         }
-
-        public async Task<bool> UpdateAmountAffiliate(int id, decimal newAmountConsumed)
-        {
-            Affiliate affiliate = await _Context.Affiliates.FirstOrDefaultAsync(x => x.Id == id);
-
-            affiliate.AmountConsumed = newAmountConsumed;
-
-            return await SaveAsync();
-        }
     }
 }

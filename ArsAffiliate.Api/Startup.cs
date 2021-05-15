@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ArsAffiliate.Persistence.Data;
+using AutoMapper;
+using ArsAffiliate.Service.AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -23,6 +27,13 @@ namespace ArsAffiliate.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IMapper>(new MapperConfiguration(configuration =>
+            {
+                configuration.AddProfile(typeof(Configurations));
+            }).CreateMapper());
+
+            services.AddDbContext<PersistencsDataContext>(option => option.UseSqlServer(Configuration.GetConnectionString("defaultConnection"), migrationsAssembly => migrationsAssembly.MigrationsAssembly("ArsAffiliate.Persistence")));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddMvc(setupAction =>
@@ -83,9 +94,8 @@ namespace ArsAffiliate.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("Documentacion Api Ars Afilidos", new OpenApiInfo
-                { Title = "API Ars Afiliates", Version = "v1" });
+                { Title = "API Ars Afiliates" });
             });
-
         }
 
 

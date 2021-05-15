@@ -10,6 +10,7 @@ namespace ArsAffiliate.Domain.Entitys
         [Key]
         public int Id { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         [Required]
         public decimal TotalCost { get; set; }
 
