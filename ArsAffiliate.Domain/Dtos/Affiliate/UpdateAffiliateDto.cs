@@ -1,7 +1,9 @@
-﻿namespace ArsAffiliate.Domain.Dtos.Affiliate
+﻿using System;
+
+namespace ArsAffiliate.Domain.Dtos.Affiliate
 {
     public class UpdateAffiliateDto : CreateAffiliateDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

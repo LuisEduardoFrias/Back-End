@@ -41,14 +41,6 @@ namespace ArsAffiliate.Api.Controllers
         }
 
 
-        [HttpPatch]
-        [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.update.amonunt.affiliate+json" })]
-        public async Task Update([FromBody] UpdateAmountAffiliateDto UpdateAmountaffiliateDto)
-        {
-            await applicationAffiliate.UpdateAsync(UpdateAmountaffiliateDto);
-        }
-
-
         [HttpPut]
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.update.affiliate+json" })]
         public async Task Update([FromBody] UpdateAffiliateDto affiliateDto)

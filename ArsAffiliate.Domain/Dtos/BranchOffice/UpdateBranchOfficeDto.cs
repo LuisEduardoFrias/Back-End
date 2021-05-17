@@ -1,7 +1,9 @@
-﻿namespace ArsAffiliate.Domain.Dtos.BranchOffice
+﻿using System;
+
+namespace ArsAffiliate.Domain.Dtos.BranchOffice
 {
     public class UpdateBranchOfficeDto : CreateBranchOfficeDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

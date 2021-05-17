@@ -35,9 +35,9 @@ namespace ArsAffiliate.Application.EfcApplications
             IQueryable<MedicalBill> query = MedicalBillEfc.Show();
 
             if (filter == null)
-                return _mapper.Map<List<ShowMedicalBillDto>>(await query.ToListAsync());
+                return mapper.Map<List<ShowMedicalBillDto>>(await query.ToListAsync());
 
-            return _mapper.Map<List<ShowMedicalBillDto>>(await query
+            return mapper.Map<List<ShowMedicalBillDto>>(await query
                 .Where(x => 
                 x.RegistrationDate.ToString("dd/MM/yyyy").Contains(filter) || 
                 x.Services.Where(x =>
@@ -47,7 +47,7 @@ namespace ArsAffiliate.Application.EfcApplications
 
         public async Task<ActionResult> CreateAsync(CreateMedicalBillDto MedicalBillDto)
         {
-            if (!await MedicalBillEfc.Create(_mapper.Map<MedicalBill>(MedicalBillDto)))
+            if (!await MedicalBillEfc.Create(mapper.Map<MedicalBill>(MedicalBillDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while creating the MedicalBill" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
@@ -55,7 +55,7 @@ namespace ArsAffiliate.Application.EfcApplications
 
         public async Task<ActionResult> UpdateAsync(UpdateMedicalBillDto MedicalBillDto)
         {
-            if (!await MedicalBillEfc.Update(_mapper.Map<MedicalBill>(MedicalBillDto)))
+            if (!await MedicalBillEfc.Update(mapper.Map<MedicalBill>(MedicalBillDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while updating the MedicalBill" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };

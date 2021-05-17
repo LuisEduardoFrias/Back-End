@@ -29,7 +29,7 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
         }
 
 
-        public async Task<RequestAuthentication> CreateUser(CreateUserDto userCredentials)
+        public async Task<RequestAuthentication> CreateUserAsync(CreateUserDto userCredentials)
         {
             var user = new IdentityUser { UserName = userCredentials.Name + userCredentials.LastName, Email = userCredentials.Email };
             var result = await _userManager.CreateAsync(user, userCredentials.Password);
@@ -53,7 +53,7 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
         }
 
 
-        public async Task<RequestAuthentication> Login(LogerDto userCredentials, string UserName)
+        public async Task<RequestAuthentication> LoginAsync(LogerDto userCredentials, string UserName)
         {
             var respons = await _signManager.PasswordSignInAsync(userCredentials.Email, userCredentials.Password,
                 isPersistent: false, lockoutOnFailure: false);

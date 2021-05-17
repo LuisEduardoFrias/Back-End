@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +32,31 @@ namespace ArsAffiliate.Authentication.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddDbContext<PersistencsDataContext>(option => option.UseSqlServer(
+            Configuration.GetConnectionString(SettingsStrings.ConnectionString),
+            migrationsAssembly => migrationsAssembly.MigrationsAssembly("Authentication.Api")));
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //{
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequiredLength = 6;
+            //    options.Password.RequireLowercase = false;
+            //    options.Password.RequireUppercase = true;
+            //    options.Password.RequireNonAlphanumeric = false;
+
+            //    // Lockout settings.
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            //    options.Lockout.MaxFailedAccessAttempts = 5;
+            //    options.Lockout.AllowedForNewUsers = true;
+
+            //    // User settings.
+            //    options.User.AllowedUserNameCharacters =
+            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            //    options.User.RequireUniqueEmail = false;
+            //})
+            //.AddEntityFrameworkStores<PersistencsDataContext>()
+            //.AddDefaultTokenProviders();
+
             services.AddMvc(setupAction =>
             {
                 setupAction.EnableEndpointRouting = false;
@@ -40,7 +66,7 @@ namespace ArsAffiliate.Authentication.Api
                 var jsonInputFormatter = setupAction.InputFormatters.OfType<SystemTextJsonInputFormatter>().FirstOrDefault();
 
                 jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.loign+json");
-                jsonInputFormatter.SupportedMediaTypes.Add("aapplication/vnd.arsaffiliate.createuser+json");
+                jsonInputFormatter.SupportedMediaTypes.Add("application/vnd.arsaffiliate.createuser+json");
 
             });
 

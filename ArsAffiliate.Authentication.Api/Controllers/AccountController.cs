@@ -10,17 +10,13 @@ namespace ArsAffiliate.Authentication.Api.Controllers
 
     [Route("api/account")]
     [ApiController]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly UserManager<IdentityUser> _UserManager;
-        private readonly SignInManager<IdentityUser> _SignManager;
-        private readonly IMapper _Mapper;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper)
+
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper) :
+            base(userManager, signManager, mapper)
         {
-            _UserManager = userManager;
-            _SignManager = signManager;
-            _Mapper = mapper;
         }
 
 
@@ -28,13 +24,7 @@ namespace ArsAffiliate.Authentication.Api.Controllers
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.createuser+json" })]
         public async Task<ActionResult<RequestAuthenticationDto>> CreateUser([FromBody] CreateUserDto CreateUserDto)
         {
-            //var request = await RepositoryUserEfc.GetInstance(_UserManager, _SignManager).CreateUser(CreateUserDto);
-
-            //if (request.Error != null)
-            //    return BadRequest(request.Error);
-
-            //return _Mapper.Map<RequestAuthenticationDto>(request);
-            return NoContent();
+            return await applicationAccount.CreateUserAsync(CreateUserDto);
         }
 
 
@@ -42,15 +32,7 @@ namespace ArsAffiliate.Authentication.Api.Controllers
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.loign+json" })]
         public async Task<ActionResult<RequestAuthenticationDto>> Login([FromBody] LogerDto login)
         {
-            //var user = _UserManager.GetUserAsync((ClaimsPrincipal)this.User.Identity);
-
-            //var request = await RepositoryUserEfc.GetInstance(_UserManager, _SignManager).Login(login, "");
-
-            //if (request.Error != null)
-            //    return BadRequest(request.Error);
-
-            //return _Mapper.Map<RequestAuthenticationDto>(request); 
-            return NoContent();
+            return await applicationAccount.LoginAsync(login);
         }
 
     }

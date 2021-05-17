@@ -8,7 +8,7 @@ namespace ArsAffiliate.Domain.Entitys
     public class BranchOffice
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Column(TypeName = "varchar(100)")]
         [Required]

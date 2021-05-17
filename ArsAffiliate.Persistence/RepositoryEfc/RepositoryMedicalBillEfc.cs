@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ArsAffiliate.Persistence.RepositoryEfc
 {
-    public class RepositoryMedicalBillEfc : RepositoryBaseEfc, IRepository<MedicalBill>, IRepositoryChangeStatus
+    public class RepositoryMedicalBillEfc : RepositoryBaseEfc, IRepository<MedicalBill>
     {
 
         #region Singletom

@@ -14,6 +14,9 @@ namespace ArsAffiliate.Persistence.Data
         public DbSet<BranchOffice> BranchOffices { get; set; }
         public DbSet<Domain.Entitys.Service> Services { get; set; }
         public DbSet<MedicalBill> MedicalBills { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<ServiceDoctor> ServiceDoctors { get; set; }
+        public DbSet<WorkingHour> WorkingHours { get; set; }
 
         #endregion
 

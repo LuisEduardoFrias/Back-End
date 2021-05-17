@@ -4,25 +4,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ArsAffiliate.Domain.Entitys
 {
-    public class Service
+    public class Doctor
     {
         [Key]
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "varchar(25)")]
         [Required]
         public string Name { get; set; }
 
+        [Column(TypeName = "varchar(25)")]
         [Required]
-        public int PercentCovers { get; set; }
+        public string LastName { get; set; }
 
-        [Column(TypeName = "bit")]
+        [Column(TypeName = "varchar(20)")]
         [Required]
-        public bool Status { get; set; }
+        public string BranchMedicine { get; set; }
 
-        [Required]
-        public BranchOffice BranchOffice { get; set; }
+        public int WorkingHoursId { get; set; }
+
+        [ForeignKey("WorkingHoursId")]
+        public WorkingHour WorkingHours { get; set; }
 
         public ICollection<ServiceDoctor> ServiceDoctors { get; set; }
-}
+    }
 }

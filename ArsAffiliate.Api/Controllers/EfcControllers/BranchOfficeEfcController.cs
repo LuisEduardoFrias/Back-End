@@ -2,6 +2,7 @@
 using ArsAffiliate.Service.RequestHeaderMatchMadiaType;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -49,7 +50,7 @@ namespace ArsAffiliate.Api.Controllers
 
         [HttpPatch("{IdentificationCard, status}")]
         [RequestHeaderMatchMadiaType("Content-Type", new string[] { "application/vnd.arsaffiliate.efc.changestatus.affiliate+json" })]
-        public async Task<IActionResult> ChangeStatus([FromQuery] int id, [FromQuery] bool status)
+        public async Task<IActionResult> ChangeStatus([FromQuery] Guid id, [FromQuery] bool status)
         {
             return await applicationBranchOffice.ChangeStatusAsync(id, status);
         }

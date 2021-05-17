@@ -8,7 +8,7 @@ namespace ArsAffiliate.Domain.Entitys
     public class Affiliate
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Column(TypeName = "varchar(15)")]
         [Required]

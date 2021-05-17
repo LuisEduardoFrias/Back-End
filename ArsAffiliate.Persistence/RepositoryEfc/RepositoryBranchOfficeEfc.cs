@@ -1,8 +1,8 @@
 ﻿using ArsAffiliate.Domain.Entitys;
 using ArsAffiliate.Persistence.Data;
 using ArsAffiliate.Persistence.Intefaces;
-using ArsAffiliate.Service.EntensionMethods;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,7 +32,7 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
         public IQueryable<BranchOffice> Show()
         {
-            return _Context.BranchOffices;
+            return _Context.BranchOffices.Include(x => x.Services);
         }
 
         public async Task<bool> Create(BranchOffice entity)
@@ -49,9 +49,9 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
             return await SaveAsync();
         }
 
-        public async Task<bool> ChangeStatus(int id, bool status)
+        public async Task<bool> ChangeStatus(Guid id, bool status)
         {
-            BranchOffice branchOffice = await _Context.BranchOffices.FirstOrDefaultAsync(x => x.Id == id.ToInt());
+            BranchOffice branchOffice = await _Context.BranchOffices.FirstOrDefaultAsync(x => x.Id.CompareTo(id) == 0);
 
             if (branchOffice == null)
                 return false;

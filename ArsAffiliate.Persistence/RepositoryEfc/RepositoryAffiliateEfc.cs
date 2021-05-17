@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ArsAffiliate.Persistence.RepositoryEfc
 {
-    public class RepositoryAffiliateEfc : RepositoryBaseEfc, IRepository<Affiliate>, IRepositoryChangeStatus
+    public class RepositoryAffiliateEfc : RepositoryBaseEfc, IRepository<Affiliate>
     {
 
         #region Singletom
@@ -32,14 +32,17 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
         public IQueryable<Affiliate> Show()
         {
-            return _Context.Affiliates;
+            //return _Context.Affiliates.Include(x => x.Plan).Include(x => x.MedicalBills);
+            return null;
         }
 
         public async Task<bool> Create(Affiliate entity)
         {
-            await _Context.Affiliates.AddAsync(entity);
+            //await _Context.Affiliates.AddAsync(entity);
 
-            return await SaveAsync();
+            //return await SaveAsync();
+
+            return false;
         }
 
         public async Task<bool> Update(Affiliate entity)
@@ -51,19 +54,22 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
         public async Task<Affiliate> AmountConsumedAsync(int id)
         {
-            return await _Context.Affiliates.Include(x => x.MedicalBills).FirstOrDefaultAsync(x => x.Id == id);
+            // return await _Context.Affiliates.Include(x => x.MedicalBills).FirstOrDefaultAsync(x => x.Id == id);
+            return null;
         }
 
         public async Task<bool> ChangeStatus(int id, bool status)
         {
-            Affiliate affiliate = await _Context.Affiliates.FirstOrDefaultAsync(x => x.Id == id.ToInt());
+            //Affiliate affiliate = await _Context.Affiliates.FirstOrDefaultAsync(x => x.Id == id.ToInt());
 
-            if (affiliate == null)
-                return false;
+            //if (affiliate == null)
+            //    return false;
 
-            affiliate.Status = status;
+            //affiliate.Status = status;
 
-            return await SaveAsync();
+            //return await SaveAsync();
+
+            return false;
         }
     }
 }

@@ -34,16 +34,16 @@ namespace ArsAffiliate.Application.EfcApplications
             IQueryable<Domain.Entitys.Service> query = ServiceEfc.Show();
 
             if (filter == null)
-                return _mapper.Map<List<ShowServiceDto>>(await query.ToListAsync());
+                return mapper.Map<List<ShowServiceDto>>(await query.ToListAsync());
 
-            return _mapper.Map<List<ShowServiceDto>>(await query
+            return mapper.Map<List<ShowServiceDto>>(await query
                 .Where(x => x.Name.Contains(filter))
                 .ToListAsync());
         }
 
         public async Task<ActionResult> CreateAsync(CreateServiceDto affiliateDto)
         {
-            if (!await ServiceEfc.Create(_mapper.Map<Domain.Entitys.Service>(affiliateDto)))
+            if (!await ServiceEfc.Create(mapper.Map<Domain.Entitys.Service>(affiliateDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while creating the Service" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
@@ -51,7 +51,7 @@ namespace ArsAffiliate.Application.EfcApplications
 
         public async Task<ActionResult> UpdateAsync(UpdateServiceDto affiliateDto)
         {
-            if (!await ServiceEfc.Update(_mapper.Map<Domain.Entitys.Service>(affiliateDto)))
+            if (!await ServiceEfc.Update(mapper.Map<Domain.Entitys.Service>(affiliateDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while updating the Service" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };

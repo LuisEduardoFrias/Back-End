@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ArsAffiliate.Application\ArsAffiliate.Application.csproj" />
     <ProjectReference Include="..\ArsAffiliate.Domain\ArsAffiliate.Domain.csproj" />
     <ProjectReference Include="..\ArsAffiliate.Persistence\ArsAffiliate.Persistence.csproj" />
     <ProjectReference Include="..\ArsAffiliate.Service\ArsAffiliate.Service.csproj" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ArsAffiliate.Persistence.RepositoryEfc
 {
-    public class RepositoryServiceEfc : RepositoryBaseEfc, IRepository<Domain.Entitys.Service>, IRepositoryChangeStatus
+    public class RepositoryServiceEfc : RepositoryBaseEfc, IRepository<Domain.Entitys.Service>
     {
 
         #region Singletom
@@ -31,7 +31,7 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
         public IQueryable<Domain.Entitys.Service> Show()
         {
-            return _Context.Services;
+            return _Context.Services.Include(x => x.ServiceDoctors).ThenInclude(x => x.Doctor).Include(x => x.BranchOffice);
         }
 
         public async Task<bool> Create(Domain.Entitys.Service entity)

@@ -63,7 +63,5 @@ namespace ArsAffiliate.Api.Controllers
         {
             return await applicationPlan.ChangeStatusAsync(id, status);
         }
-
-
     }
 }

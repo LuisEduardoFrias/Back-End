@@ -35,9 +35,9 @@ namespace ArsAffiliate.Application.EfcApplications
             IQueryable<Plan> query = PlanEfc.Show();
 
             if (filter == null)
-                return _mapper.Map<List<ShowPlanDto>>(await query.ToListAsync());
+                return mapper.Map<List<ShowPlanDto>>(await query.ToListAsync());
 
-            return _mapper.Map<List<ShowPlanDto>>(await query
+            return mapper.Map<List<ShowPlanDto>>(await query
                 .Where(x => x.PlanName.Contains(filter))
                 .ToListAsync());
         }
@@ -46,14 +46,14 @@ namespace ArsAffiliate.Application.EfcApplications
         {
             var query = PlanEfc.Show();
 
-            return _mapper.Map<List<ShowPlanDto>>(await query
+            return mapper.Map<List<ShowPlanDto>>(await query
                 .Where(x => x.Status == true)
                 .ToListAsync());
         }
 
         public async Task<ActionResult> CreateAsync(CreatePlanDto PlanDto)
         {
-            if (!await PlanEfc.Create(_mapper.Map<Plan>(PlanDto)))
+            if (!await PlanEfc.Create(mapper.Map<Plan>(PlanDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while creating the Plan" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
@@ -61,7 +61,7 @@ namespace ArsAffiliate.Application.EfcApplications
 
         public async Task<ActionResult> UpdateAsync(UpdatePlanDto PlanDto)
         {
-            if (!await PlanEfc.Update(_mapper.Map<Plan>(PlanDto)))
+            if (!await PlanEfc.Update(mapper.Map<Plan>(PlanDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while updating the Plan" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
