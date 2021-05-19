@@ -14,15 +14,15 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 {
     public class RepositoryUserEfc
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signManager;
+        
 
-
-        public static RepositoryUserEfc GetInstance(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager) =>
+        public static RepositoryUserEfc GetInstance(UserManager<User> userManager, SignInManager<User> signManager) =>
             new RepositoryUserEfc(userManager, signManager);
 
 
-        private RepositoryUserEfc(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager)
+        private RepositoryUserEfc(UserManager<User> userManager, SignInManager<User> signManager)
         {
             _userManager = userManager;
             _signManager = signManager;
@@ -31,57 +31,86 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
         public async Task<RequestAuthentication> CreateUserAsync(CreateUserDto userCredentials)
         {
-            var user = new IdentityUser { UserName = userCredentials.Name + userCredentials.LastName, Email = userCredentials.Email };
-            var result = await _userManager.CreateAsync(user, userCredentials.Password);
+            var user = new User { FirstName = userCredentials.Name , LastName = userCredentials.LastName, Email = userCredentials.Email, UserName = userCredentials.Email };
+
+            IdentityResult result = new IdentityResult();
+
+            try
+            {
+                result = await _userManager.CreateAsync(user, userCredentials.Password);
+            }
+            catch (Exception ex)
+            {
+
+                ex.Message.ToString();
+            }
 
             if (result.Succeeded)
             {
-                return await ConstrairToken(userCredentials, userCredentials.Name);
+                return await ConstrairToken(userCredentials.Email);
             }
             else
             {
-                string _error = "";
-
-                foreach (var error in result.Errors)
+                string error = "";
+                foreach (var error_ in result.Errors)
                 {
-                    _error = $"{error.Code} {error.Description}";
+                    error = $"{error_.Code} - {error_.Description}";
                 }
 
-                return new RequestAuthentication { Error = _error };
-            }
-
-        }
-
-
-        public async Task<RequestAuthentication> LoginAsync(LogerDto userCredentials, string UserName)
-        {
-            var respons = await _signManager.PasswordSignInAsync(userCredentials.Email, userCredentials.Password,
-                isPersistent: false, lockoutOnFailure: false);
-
-            if (respons.Succeeded)
-            {
-                return await ConstrairToken(userCredentials, UserName);
-            }
-            else
-            {
-                return new RequestAuthentication { Error = "Usuario o contraseña incorrecta" };
+                return new RequestAuthentication 
+                { Error = error };
             }
         }
 
 
-        private async Task<RequestAuthentication> ConstrairToken(LogerDto userCredentials, string UserName)
+        public async Task<RequestAuthentication> LoginAsync(LogerDto userCredentials)
         {
+            try
+            {
+                var respons = await _signManager.CheckPasswordSignInAsync(
+                    await _userManager.FindByEmailAsync(userCredentials.Email),
+                    userCredentials.Password, false);
+
+                if (respons.Succeeded)
+                {
+                    return await ConstrairToken(userCredentials.Email);
+                }
+                else
+                {
+                    return new RequestAuthentication { Error = "Usuario o contraseña incorrecta" };
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
+
+
+        private async Task<RequestAuthentication> ConstrairToken(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var claimsdb = await _userManager.GetClaimsAsync(user);
+
             var claims = new List<Claim>
             {
-                new Claim("email",userCredentials.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FirstName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Surname, user.LastName)
             };
 
-            var usuario = await _userManager.FindByEmailAsync(userCredentials.Email);
-            var claimsdb = await _userManager.GetClaimsAsync(usuario);
+            var Roles = await _userManager.GetRolesAsync(user);
+
+            foreach(string role in Roles)
+            {
+                claims.Add( new Claim(ClaimTypes.Role, role));
+            }
 
             claims.AddRange(claimsdb);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SettingsStrings.Getinstance().KeyJwt));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SettingsStrings.KeyJwt));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expiration = DateTime.UtcNow.AddHours(9);
@@ -95,7 +124,8 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
             return new RequestAuthentication()
             {
-                UserName = UserName,
+                UserName = user.FirstName,
+                UserId = user.Id,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };

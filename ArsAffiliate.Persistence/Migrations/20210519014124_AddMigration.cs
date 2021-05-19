@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ArsAffiliate.Persistence.Migrations
 {
-    public partial class Identity : Migration
+    public partial class AddMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,11 +39,28 @@ namespace ArsAffiliate.Persistence.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(maxLength: 25, nullable: false),
+                    LastName = table.Column<string>(maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BranchOffices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(type: "varchar(100)", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(nullable: false),
+                    Address = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BranchOffices", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,14 +69,28 @@ namespace ArsAffiliate.Persistence.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlanName = table.Column<string>(nullable: true),
-                    CoverageAmount = table.Column<decimal>(nullable: false),
+                    PlanName = table.Column<string>(type: "varchar(15)", nullable: false),
+                    CoverageAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<bool>(nullable: false)
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_plans", x => x.Id);
+                    table.PrimaryKey("PK_Plans", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkingHours",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateTime = table.Column<DateTime>(nullable: false),
+                    TimeToLeaveWork = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingHours", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,7 +160,8 @@ namespace ArsAffiliate.Persistence.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    RoleId = table.Column<string>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,33 +204,135 @@ namespace ArsAffiliate.Persistence.Migrations
                 name: "Affiliates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(type: "varchar(15)", nullable: false),
+                    LastName = table.Column<string>(type: "varchar(15)", nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
-                    Nacionality = table.Column<string>(nullable: true),
-                    Sex = table.Column<string>(nullable: false),
-                    IdentificationCard = table.Column<string>(nullable: true),
-                    SocialSecurityNumber = table.Column<string>(nullable: true),
+                    Nacionality = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Sex = table.Column<string>(type: "char(1)", nullable: false),
+                    IdentificationCard = table.Column<string>(type: "char(11)", nullable: false),
+                    SocialSecurityNumber = table.Column<string>(type: "varchar(15)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
-                    AmountConsumed = table.Column<decimal>(nullable: false),
-                    Status = table.Column<bool>(nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
                     PlanId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_affiliates", x => x.Id);
+                    table.PrimaryKey("PK_Affiliates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_affiliates_plans_PlanId",
+                        name: "FK_Affiliates_Plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "Plans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "varchar(25)", nullable: false),
+                    LastName = table.Column<string>(type: "varchar(25)", nullable: false),
+                    BranchMedicine = table.Column<string>(type: "varchar(20)", nullable: false),
+                    WorkingHoursId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Doctors_WorkingHours_WorkingHoursId",
+                        column: x => x.WorkingHoursId,
+                        principalTable: "WorkingHours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MedicalBills",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    AffiliateId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicalBills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MedicalBills_Affiliates_AffiliateId",
+                        column: x => x.AffiliateId,
+                        principalTable: "Affiliates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "varchar(100)", nullable: false),
+                    PercentCovers = table.Column<int>(nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    BranchOfficeId = table.Column<Guid>(nullable: false),
+                    MedicalBillId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_BranchOffices_BranchOfficeId",
+                        column: x => x.BranchOfficeId,
+                        principalTable: "BranchOffices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Services_MedicalBills_MedicalBillId",
+                        column: x => x.MedicalBillId,
+                        principalTable: "MedicalBills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceDoctors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorId = table.Column<int>(nullable: false),
+                    serviceId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceDoctors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceDoctors_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServiceDoctors_Services_serviceId",
+                        column: x => x.serviceId,
+                        principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "cfdeecc7-baeb-4254-8fc0-9780b3989895", "85132246-17a7-49f3-8794-baf7e5c2bbff", "SuperAdmin", "SUPERADMIN" });
+
             migrationBuilder.CreateIndex(
-                name: "IX_affiliates_PlanId",
+                name: "IX_Affiliates_PlanId",
                 table: "Affiliates",
                 column: "PlanId");
 
@@ -241,210 +375,39 @@ namespace ArsAffiliate.Persistence.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctors_WorkingHoursId",
+                table: "Doctors",
+                column: "WorkingHoursId");
 
-//            migrationBuilder.Sql(@"
-//-- Plan procedures
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicalBills_AffiliateId",
+                table: "MedicalBills",
+                column: "AffiliateId");
 
-//create proc ShowPlans
-//as
-//begin
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceDoctors_DoctorId",
+                table: "ServiceDoctors",
+                column: "DoctorId");
 
-//	select * from Plans
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceDoctors_serviceId",
+                table: "ServiceDoctors",
+                column: "serviceId");
 
-//end
-//go
+            migrationBuilder.CreateIndex(
+                name: "IX_Services_BranchOfficeId",
+                table: "Services",
+                column: "BranchOfficeId");
 
-
-//create proc CreatePlan
-//@PlanName varchar(25),
-//@CoverageAmount decimal,
-//@RegistrationDate datetime,
-//@Status bit
-//as
-//begin
-
-//	Insert into Plans values (
-//	@PlanName,
-//	@CoverageAmount,
-//	@RegistrationDate,
-//	@Status)
-
-//end
-//go
-
-
-//create proc UpdatePlan 
-//@Id int,
-//@PlanName varchar(25),
-//@CoverageAmount decimal,
-//@RegistrationDate datetime,
-//@Status bit
-//as
-//begin
-
-//	Update Plans set
-//	PlanName = @PlanName,             
-//	CoverageAmount = @CoverageAmount,				
-//	RegistrationDate = @RegistrationDate ,		
-//	Status = @Status
-//	where  
-//	Id = @Id
-
-//end
-//go
-
-
-//create proc SearchPlan @PlanName varchar(25)
-//as
-//begin
-
-//	select * from Plans where PlanName =  @PlanName
-
-//end
-
-
-//create proc ChangeStatusPlan @Id int, @Status bit
-//as
-//begin
-
-//	Update Plans set 
-//	Status = @Status
-//	where  
-//	Id = @Id
-
-//end
-//go
-
-
-//-- Affiliate procedures
-
-//create proc ShowAffiliate
-//as
-//begin
-
-//	select * from Affiliates as A 
-//	Join Plans as P on A.PlanId = P.Id;
-
-//end
-//go
-
-
-//create proc Createaffiliate
-//@Name              varchar(50),
-//@LastName			varchar(50),
-//@Date			DateTime,
-//@Nacionality 			varchar(25),
-//@Sex				char(1),
-//@IdentificationCard			char(11),
-//@SocialSecurityNumber	varchar(25),
-//@RegistrationDate		datetime,
-//@AmountConsumed		decimal,
-//@Status		int,
-//@PlanId			int
-//as
-//begin
-
-//	Insert into Affiliates values (
-//	 @Name             
-//	,@LastName			
-//	,@Date				
-//	,@Nacionality 		
-//	,@Sex					
-//	,@IdentificationCard
-//	,@SocialSecurityNumber
-//	,@RegistrationDate		
-//	,@AmountConsumed		
-//	,@Status			
-//	,@PlanId)
-
-//end
-//go
-
-
-//create proc UpdateAffiliate
-//@Id int,
-//@Name              varchar(50),
-//@LastName			varchar(50),
-//@Date			DateTime,
-//@Nacionality 			varchar(25),
-//@Sex				char(1),
-//@IdentificationCard			char(11),
-//@SocialSecurityNumber	varchar(25),
-//@RegistrationDate		datetime,
-//@AmountConsumed		decimal,
-//@Status		int,
-//@PlanId			int
-//as
-//begin
-
-//	Update Affiliates set
-//	Name= @Name,             
-//	LastName= @LastName,			
-//	Date= @Date	,			
-//	Nacionality= @Nacionality ,		
-//	Sex= @Sex	,			
-//	IdentificationCard= @IdentificationCard		,		
-//	SocialSecurityNumber= @SocialSecurityNumber	,
-//	RegistrationDate= @RegistrationDate		,
-//	AmountConsumed= @AmountConsumed	,	
-//	Status= @Status	,		
-//	PlanId= @PlanId	
-//	where  
-//	Id = @Id
-
-//end
-//go
-
-
-//create proc UpdateAmountAffiliate
-//@Id int,
-//@AmountConsumed		decimal
-//as
-//begin
-
-//	Update Affiliates set
-//	AmountConsumed = @AmountConsumed	
-//	where  
-//	Id = @Id
-
-//end
-//go
-
-
-//Create proc SearchAffiliate @IdentificationCard char(11)
-//as
-//begin
-
-//		select * from Affiliates as A 
-//		Join Plans as P on A.PlanId = P.Id 
-//		where 
-//		Name =  @Search or
-//		LastName =   @Search or
-//		IdentificationCard =  @IdentificationCard;
-
-//end
-//go
-
-
-//Create proc ChangeStatusAffiliate @IdentificationCard char(11), @Status int
-//as
-//begin
-
-//	Update Affiliates set 
-//	Status = @Status
-//	where  
-//	IdentificationCard = @IdentificationCard
-
-//end
-//go", true);
-
+            migrationBuilder.CreateIndex(
+                name: "IX_Services_MedicalBillId",
+                table: "Services",
+                column: "MedicalBillId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Affiliates");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -461,13 +424,34 @@ namespace ArsAffiliate.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Plans");
+                name: "ServiceDoctors");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Doctors");
+
+            migrationBuilder.DropTable(
+                name: "Services");
+
+            migrationBuilder.DropTable(
+                name: "WorkingHours");
+
+            migrationBuilder.DropTable(
+                name: "BranchOffices");
+
+            migrationBuilder.DropTable(
+                name: "MedicalBills");
+
+            migrationBuilder.DropTable(
+                name: "Affiliates");
+
+            migrationBuilder.DropTable(
+                name: "Plans");
         }
     }
 }

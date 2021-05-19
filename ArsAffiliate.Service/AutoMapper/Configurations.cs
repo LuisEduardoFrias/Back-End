@@ -19,6 +19,7 @@ namespace ArsAffiliate.Service.AutoMapper
             CreateMap<Plan, ShowPlanDto>();
 
             CreateMap<RequestAuthentication, RequestAuthenticationDto>();
+            CreateMap<RequestAuthenticationDto, RequestAuthentication>();
         }
     }
 }

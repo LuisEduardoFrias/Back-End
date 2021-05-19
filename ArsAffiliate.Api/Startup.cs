@@ -33,9 +33,9 @@ namespace ArsAffiliate.Api
                 configuration.AddProfile(typeof(Configurations));
             }).CreateMapper());
 
-            services.AddDbContext<PersistencsDataContext>(option => option.UseSqlServer(
-                Configuration.GetConnectionString(SettingsStrings.ConnectionString),
-                migrationsAssembly => migrationsAssembly.MigrationsAssembly("ArsAffiliate.Api")));
+            services.AddDbContext<PersistencsDataContext>(option => 
+            option.UseSqlServer(SettingsStrings.ConnectionString, migrationsAssembly =>
+            migrationsAssembly.MigrationsAssembly("ArsAffiliate.Persistence")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

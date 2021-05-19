@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArsAffiliate.Application", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArsAffiliate.Api", "ArsAffiliate.Api\ArsAffiliate.Api.csproj", "{00809035-1A59-4FB3-8023-085F89F80120}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArsAffiliate.Authentication.Api", "ArsAffiliate.Authentication.Api\ArsAffiliate.Authentication.Api.csproj", "{C8649FD7-9F63-47F3-A14F-EFD67DDBCEEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArsAffiliate.Api.Authentication", "ArsAffiliate.Authentication.Api\ArsAffiliate.Api.Authentication.csproj", "{C8649FD7-9F63-47F3-A14F-EFD67DDBCEEB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{05088707-7960-4BDA-BBB2-B927F920651C} = {05088707-7960-4BDA-BBB2-B927F920651C}
 		{69FACF77-195B-4E31-8170-4BC30831E0ED} = {69FACF77-195B-4E31-8170-4BC30831E0ED}
@@ -18,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArsAffiliate.Persistence", "ArsAffiliate.Persistence\ArsAffiliate.Persistence.csproj", "{05088707-7960-4BDA-BBB2-B927F920651C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArsAffiliate.Service", "ArsAffiliate.Service\ArsAffiliate.Service.csproj", "{318A23BA-0377-42C8-8B5A-8AC48585FD58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArsAffiliate.Api.Gateways", "ArsAffiliate.Api.Gateways\ArsAffiliate.Api.Gateways.csproj", "{E75482AC-6BC0-4043-A7D8-2CED5E08ED6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{318A23BA-0377-42C8-8B5A-8AC48585FD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{318A23BA-0377-42C8-8B5A-8AC48585FD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{318A23BA-0377-42C8-8B5A-8AC48585FD58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E75482AC-6BC0-4043-A7D8-2CED5E08ED6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E75482AC-6BC0-4043-A7D8-2CED5E08ED6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E75482AC-6BC0-4043-A7D8-2CED5E08ED6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E75482AC-6BC0-4043-A7D8-2CED5E08ED6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

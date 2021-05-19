@@ -6,7 +6,12 @@ namespace ArsAffiliate.Domain.Dtos.MedicalBill
     public class CreateMedicalBillDto : ErrorDto
     {
         [Required]
-        public decimal TotalCost { get; set; }
+        public Guid BranchOfficeId { get; set; }
+
+        public int ServiceId { get; set; }
+
+        [Required]
+        public Guid AffiliateId { get; set; }
 
         [Required]
         public DateTime RegistrationDate { get; set; }

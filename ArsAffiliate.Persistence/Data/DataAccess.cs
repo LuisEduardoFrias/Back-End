@@ -37,7 +37,7 @@ namespace ArsAffiliate.Persistence.Data
         {
             _sqlConnnection = new SqlConnection
             {
-                ConnectionString = SettingsStrings.Getinstance().ConnectionString
+                ConnectionString = SettingsStrings.ConnectionString
             };
 
             _sqlCommnd = new SqlCommand

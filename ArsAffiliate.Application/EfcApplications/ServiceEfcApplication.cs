@@ -41,17 +41,17 @@ namespace ArsAffiliate.Application.EfcApplications
                 .ToListAsync());
         }
 
-        public async Task<ActionResult> CreateAsync(CreateServiceDto affiliateDto)
+        public async Task<ActionResult> CreateAsync(CreateServiceDto serviceDto)
         {
-            if (!await ServiceEfc.Create(mapper.Map<Domain.Entitys.Service>(affiliateDto)))
+            if (!await ServiceEfc.Create(mapper.Map<Domain.Entitys.Service>(serviceDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while creating the Service" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };
         }
 
-        public async Task<ActionResult> UpdateAsync(UpdateServiceDto affiliateDto)
+        public async Task<ActionResult> UpdateAsync(UpdateServiceDto serviceDto)
         {
-            if (!await ServiceEfc.Update(mapper.Map<Domain.Entitys.Service>(affiliateDto)))
+            if (!await ServiceEfc.Update(mapper.Map<Domain.Entitys.Service>(serviceDto)))
                 throw new HttpResponseException { MensajeError = "an error occurred while updating the Service" };
 
             throw new HttpResponseException { StatusCode = HttpStatusCode.NoContent };

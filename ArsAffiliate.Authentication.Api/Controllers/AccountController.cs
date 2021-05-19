@@ -1,11 +1,12 @@
 ﻿using ArsAffiliate.Domain.Dtos;
+using ArsAffiliate.Domain.Entitys;
 using ArsAffiliate.Service.RequestHeaderMatchMadiaType;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace ArsAffiliate.Authentication.Api.Controllers
+namespace ArsAffiliate.Api.Authentication.Controllers
 {
 
     [Route("api/account")]
@@ -14,7 +15,7 @@ namespace ArsAffiliate.Authentication.Api.Controllers
     {
 
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper) :
+        public AccountController(UserManager<User> userManager, SignInManager<User> signManager, IMapper mapper) :
             base(userManager, signManager, mapper)
         {
         }

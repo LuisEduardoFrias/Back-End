@@ -1,4 +1,5 @@
 ﻿using ArsAffiliate.Domain.Dtos;
+using ArsAffiliate.Domain.Entitys;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace ArsAffiliate.Application.EfcApplications
 
         public static AccountApplication Instantice { get; set; }
 
-        public static AccountApplication GetInstance(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper)
+        public static AccountApplication GetInstance(UserManager<User> userManager, SignInManager<User> signManager, IMapper mapper)
         {
             if (Instantice == null)
                 Instantice = new AccountApplication(userManager, signManager, mapper);
@@ -21,7 +22,7 @@ namespace ArsAffiliate.Application.EfcApplications
 
         #endregion
 
-        private AccountApplication(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper) :
+        private AccountApplication(UserManager<User> userManager, SignInManager<User> signManager, IMapper mapper) :
             base(userManager, signManager, mapper)
         {
         }
@@ -40,7 +41,7 @@ namespace ArsAffiliate.Application.EfcApplications
         {
             //user = _UserManager.GetUserAsync((ClaimsPrincipal)this.User.Identity);
 
-            var request = await AccountEfc.LoginAsync(login, "");
+            var request = await AccountEfc.LoginAsync(login);
 
             if (request.Error != null)
                 throw new HttpResponseException { MensajeError = request.Error, StatusCode = System.Net.HttpStatusCode.BadRequest };

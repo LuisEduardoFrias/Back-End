@@ -1,5 +1,8 @@
-﻿using ArsAffiliate.Persistence.Data;
+﻿using ArsAffiliate.Domain.Entitys;
+using ArsAffiliate.Persistence.Data;
+using ArsAffiliate.Service.AutoMapper;
 using ArsAffiliate.Service.SettingsStrings;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +19,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace ArsAffiliate.Authentication.Api
+namespace ArsAffiliate.Api.Authentication
 {
     public class Startup
     {
@@ -32,30 +35,37 @@ namespace ArsAffiliate.Authentication.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<PersistencsDataContext>(option => option.UseSqlServer(
-            Configuration.GetConnectionString(SettingsStrings.ConnectionString),
-            migrationsAssembly => migrationsAssembly.MigrationsAssembly("Authentication.Api")));
+            services.AddSingleton<IMapper>(new MapperConfiguration(configuration =>
+            {
+                configuration.AddProfile(typeof(Configurations));
+            }).CreateMapper());
 
-            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            //{
-            //    options.Password.RequireDigit = false;
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequireLowercase = false;
-            //    options.Password.RequireUppercase = true;
-            //    options.Password.RequireNonAlphanumeric = false;
+            services.AddDbContext<PersistencsDataContext>(option => 
+            option.UseSqlServer( SettingsStrings.ConnectionString, migrationsAssembly => 
+            migrationsAssembly.MigrationsAssembly("ArsAffiliate.Persistence")));
 
-            //    // Lockout settings.
-            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            //    options.Lockout.MaxFailedAccessAttempts = 5;
-            //    options.Lockout.AllowedForNewUsers = true;
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<PersistencsDataContext>()
+                .AddDefaultTokenProviders();
 
-            //    // User settings.
-            //    options.User.AllowedUserNameCharacters =
-            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            //    options.User.RequireUniqueEmail = false;
-            //})
-            //.AddEntityFrameworkStores<PersistencsDataContext>()
-            //.AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
 
             services.AddMvc(setupAction =>
             {
@@ -70,9 +80,6 @@ namespace ArsAffiliate.Authentication.Api
 
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<PersistencsDataContext>()
-                .AddDefaultTokenProviders();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
@@ -83,7 +90,7 @@ namespace ArsAffiliate.Authentication.Api
                        ValidateAudience = false,
                        ValidateLifetime = true,
                        ValidateIssuerSigningKey = true,
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SettingsStrings.Getinstance().KeyJwt)),
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SettingsStrings.KeyJwt)),
                        ClockSkew = TimeSpan.Zero
                    };
                });

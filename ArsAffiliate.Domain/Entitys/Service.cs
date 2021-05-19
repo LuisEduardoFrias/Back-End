@@ -13,6 +13,10 @@ namespace ArsAffiliate.Domain.Entitys
         [Required]
         public string Name { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
+        [Required]
+        public decimal Cost { get; set; }
+
         [Required]
         public int PercentCovers { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using ArsAffiliate.Persistence.RepositoryAdo;
+﻿using ArsAffiliate.Domain.Entitys;
+using ArsAffiliate.Persistence.RepositoryAdo;
 using ArsAffiliate.Persistence.RepositoryEfc;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ namespace ArsAffiliate.Application
 
         public BaseApplicationController(Persistence.Data.PersistencsDataContext context, IMapper mapper)
         {
-            mapper = mapper;
+            this.mapper = mapper;
 
             AffiliateEfc = RepositoryAffiliateEfc.GetInstance(context);
             PlanEfc = RepositoryPlanEfc.GetInstance(context);
@@ -38,9 +39,9 @@ namespace ArsAffiliate.Application
             MedicalBillEfc = RepositoryMedicalBillEfc.GetInstance(context);
         }        
         
-        public BaseApplicationController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signManager, IMapper mapper)
+        public BaseApplicationController(UserManager<User> userManager, SignInManager<User> signManager, IMapper mapper)
         {
-            mapper = mapper;
+            this.mapper = mapper;
 
             AccountEfc = RepositoryUserEfc.GetInstance(userManager, signManager);
         }

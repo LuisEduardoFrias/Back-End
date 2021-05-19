@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace ArsAffiliate.Authentication.Api
+namespace ArsAffiliate.Api.Authentication
 {
     public class Program
     {

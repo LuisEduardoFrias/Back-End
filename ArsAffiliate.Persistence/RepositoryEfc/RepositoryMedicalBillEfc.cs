@@ -32,7 +32,9 @@ namespace ArsAffiliate.Persistence.RepositoryEfc
 
         public IQueryable<MedicalBill> Show()
         {
-            return _Context.MedicalBills.Include(x => x.Services).ThenInclude(x => x.BranchOffice);
+            return _Context.MedicalBills
+                .Include(x => x.Affiliate).ThenInclude(x => x.Plan)
+                .Include(x => x.Services).ThenInclude(x => x.BranchOffice);
         }
 
         public async Task<bool> Create(MedicalBill entity)
